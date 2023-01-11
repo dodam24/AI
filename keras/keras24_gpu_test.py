@@ -5,6 +5,9 @@ gpus = tf.config.experimental.list_physical_devices('GPU')
 print(gpus)
 
 if(gpus):
-    print("gpu 실행중")
+    print("gpu 실행함")
 else:
     print("gpu 실행안함")
+    
+
+ 

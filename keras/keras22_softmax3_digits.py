@@ -39,10 +39,11 @@ model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accur
 
 from tensorflow.keras.callbacks import EarlyStopping
 earlyStopping = EarlyStopping(monitor='val_loss', mode='min', patience=50, restore_best_weights=True, verbose=1)
-import time
-start = time.time()
-model.fit(x_train, y_train, epochs=700, batch_size=32, validation_split=0.2, verbose=1, callbacks=[earlyStopping])
-end = time.time()
+model.fit(x_train, y_train, epochs=700, batch_size=32, 
+          validation_split=0.2, 
+          verbose=1, 
+          callbacks=[earlyStopping])
+
 
 #4. 평가, 예측
 loss, accuracy = model.evaluate(x_test, y_test)
@@ -58,4 +59,3 @@ print('y_test : ', y_test)
 from sklearn.metrics import accuracy_score
 acc = accuracy_score(y_test, y_predict)
 print('accuracy : ', acc)
-print('time : ', end - start)

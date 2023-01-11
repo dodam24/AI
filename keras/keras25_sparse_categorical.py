@@ -57,7 +57,7 @@ import numpy as np
 y_predict = model.predict(x_test)
 y_predict = np.argmax(y_predict, axis=1)
 print("y_pred(예측값) : ", y_predict)
-# y_test = np.argmax(y_test, axis=1) # 원핫을 안 했으니까 여기서 사용할 필요가 없음
+# y_test = np.argmax(y_test, axis=1) # 원핫을 안 했으니까 여기서 argmax를 사용할 필요가 없음
 print("y_test(원래값) : " , y_test)
 # acc = accuracy_score(y_test, y_predict)
 # print(acc)

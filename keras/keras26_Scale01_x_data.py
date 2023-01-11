@@ -1,11 +1,12 @@
 import numpy as np
-# import pandas as pd
-# # import sklearn as sk
+import pandas as pd
+import sklearn as sk
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 from sklearn.model_selection import train_test_split
 from sklearn.datasets import load_boston
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
+from sklearn.metrics import mean_squared_error, r2_score
 
 #1. 데이터
 dataset = load_boston()
@@ -22,7 +23,23 @@ print(type(x))
 # print("최소값 : ", np.min(x))
 # print("최대값 : ", np.max(x))
 
+# ########## MinMaxScaler ##########
+# scaler = MinMaxScaler()
+# scaler.fit(x)
+# x = scaler.transform(x)
 
+# print(x)
+# print(x.shape)
+# print(type(x))
+# print(np.min(x))
+# print(np.max(x))
+# ##################################
+
+########## Standard Scaler ##########
+scaler = StandardScaler()
+scaler.fit(x)
+x = scaler.transform(x)
+#####################################
 
 # print(x)
 print(x.shape)   # (506, 13)
@@ -42,21 +59,22 @@ x_train, x_test, y_train, y_test = train_test_split(x, y,
 
 #2. 모델 구성
 model = Sequential()
-model.add(Dense(10, input_dim=13))
-model.add(Dense(7))
-model.add(Dense(2))
-model.add(Dense(5))
-model.add(Dense(70))
-model.add(Dense(1))
+model.add(Dense(10, input_dim=13, activation = 'linear'))
+model.add(Dense(7, activation='relu'))
+model.add(Dense(2, activation='relu'))
+model.add(Dense(5, activation='relu'))
+model.add(Dense(70, activation='relu'))
+model.add(Dense(1, activation='linear'))
 
 #3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam',
             metrics=['mae'])
-model.fit(x_train, y_train, epochs=100, batch_size=32)
+model.fit(x_train, y_train, epochs=100, batch_size=32, validation_split=0.2)
 
 #4. 평가, 예측
-loss = model.evaluate(x_test, y_test)
-print('loss : ', loss)
+mse, mae = model.evaluate(x_test, y_test)
+print('mse : ', mse)
+print('mae : ', mae)
 
 y_predict = model.predict(x_test)
 
