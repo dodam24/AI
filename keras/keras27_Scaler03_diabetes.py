@@ -30,6 +30,7 @@ x_train = scaler.transform(x_train)
 # x_train = scaler.fit_transform(x_test)
 x_test = scaler.transform(x_test)# 시작 (transform해야 바뀐다.)
 
+#2. 모델 구성
 model = Sequential()
 model.add(Dense(10, input_dim=10))
 model.add(Dense(10))

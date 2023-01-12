@@ -38,7 +38,6 @@ print(dataset.feature_names)
 print(dataset.DESCR)
 
 
-
 #2. 모델 구성
 model = Sequential()
 model.add(Dense(10, input_dim=13))

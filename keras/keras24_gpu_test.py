@@ -8,6 +8,3 @@ if(gpus):
     print("gpu 실행함")
 else:
     print("gpu 실행안함")
-    
-
- 
