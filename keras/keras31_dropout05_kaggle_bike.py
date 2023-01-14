@@ -42,8 +42,8 @@ scaler=MinMaxScaler()
 x_train=scaler.fit_transform(x_train)
 x_test=scaler.transform(x_test)
 
-print('x:',x_train.shape, x_test.shape) #
-print('y:',y_train.shape,y_test.shape)
+print('x:',x_train.shape, x_test.shape) # x: (7620, 8) (3266, 8)
+print('y:',y_train.shape,y_test.shape)  # y: (7620,) (3266,)
 
 
 """ #2.모델링(순차형)
@@ -55,7 +55,7 @@ model.add(Dense(20,activation='relu'))
 model.add(Dense(10,activation=linear))
 model.add(Dense(1)) """
 
-#2.모델링(함수형)
+#2.모델구성(함수형)
 input1 = Input(shape=(8,))
 dense1 = Dense(50,activation='relu')(input1)
 drop1 = Dropout(0.5)(dense1)

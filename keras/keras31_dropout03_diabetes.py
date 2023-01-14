@@ -27,7 +27,7 @@ x_train = scaler.fit_transform(x_train)
 x_test = scaler.transform(x_test)
 
 
-#2.모델링(함수형)
+#2.모델구성(함수형)
 input1 = Input(shape=(10,))
 dense1 = Dense(50,activation='relu')(input1)
 drop1 = Dropout(0.5)(dense1)

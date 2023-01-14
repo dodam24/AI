@@ -35,8 +35,8 @@ x_train = scaler.fit_transform(x_train)
 x_test = scaler.transform(x_test)
 
 
-#2.모델링(함수형)
-input1 = Input(shape=(13,))
+#2.모델구성(함수형)
+input1 =Input(shape=(13,))
 dense1 = Dense(50,activation='relu')(input1)
 dense2 = Dense(40,activation='sigmoid')(dense1)
 dense3 = Dense(30,activation='linear')(dense2)

@@ -46,7 +46,7 @@ model.add(Dense(20,activation='relu'))
 model.add(Dense(10,activation=linear))
 model.add(Dense(1)) """
 
-#2.모델링(함수형)
+#2.모델구성(함수형)
 input1 = Input(shape=(9,))
 dense1 = Dense(50,activation='relu')(input1)
 drop1 = Dropout(0.5)(dense1)

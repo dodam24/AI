@@ -35,7 +35,7 @@ x_train = scaler.fit_transform(x_train)
 x_test = scaler.transform(x_test)
 
 
-#2.모델링(함수형)
+#2.모델구성(함수형)
 input1 = Input(shape=(13,))
 dense1 = Dense(50,activation='relu')(input1)
 dense2 = Dense(40,activation='sigmoid')(dense1)
@@ -64,7 +64,7 @@ es = EarlyStopping(monitor='val_loss', mode='min', patience=10, restore_best_wei
 
 # modelcheckpoint 설정
 mcp = ModelCheckpoint(monitor='val_loss', mode='auto', verbose=1, save_best_only=True, 
-                      filepath = path+'MCP/keras30_ModelCheckPoint1.hdf5')
+                      filepath = path +'MCP/keras30_ModelCheckPoint1.hdf5')
 
 model.fit(x_train, y_train, epochs=1000, batch_size=15, validation_split=0.2, verbose=1, callbacks=[es, mcp])
 

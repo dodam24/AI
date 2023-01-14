@@ -32,9 +32,9 @@ model=Model(inputs=input1, outputs=output1)
 model.summary()
 
 #파일 저장
-path='./_save/' #상대경로
+path='./_save/'
 # path='../_save/'
-# path='C:/study/_save/' #절대경로
+# path='C:/study/_save/'
 
 model.save(path+'keras29_1_save_model.h5')
 # model.save('./_save/keras29_1_save_model.h5)

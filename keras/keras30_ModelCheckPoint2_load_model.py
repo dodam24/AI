@@ -34,7 +34,7 @@ x_test=scaler.transform(x_test)
 model=load_model(path+'MCP/keras30_modelCheckPoint1.hdf5')
 
 
-""" #2.모델링(함수형)
+""" #2.모델구성(함수형)
 input1=Input(shape=(13,))
 dense1=Dense(50,activation='relu')(input1)
 dense2=Dense(40,activation='linear')(dense1)
