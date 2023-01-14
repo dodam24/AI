@@ -48,3 +48,14 @@ model.add(Dense(100, activation='softmax'))
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 
 es = EarlyStopping(monitor='val_loss', mode='min', patience=20, restore_best_weights=True, verbose=3)
+
+mcp = ModelCheckpoint(monitor='val_loss', mode='auto', verbose=3, save_best_only=True,
+                      filepath = filepath + 'k34_cifar100_' + 'd_' + date + '_' + 'e_v_' + filename)
+
+model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['acc'])
+model.fit(x_train, y_train, epochs=100, verbose=3, batch_size=32, validation_split=0.2, callbacks=[es, mcp])
+
+#4. 평가, 예측
+results = model.evaluate(x_test, y_test)
+print('loss: ', results[0])
+print('acc: ', results[1])
