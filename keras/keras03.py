@@ -6,7 +6,7 @@ print(tf.__version__)   # 2.7.4
 x = np.array([1,2,3,4,5])
 y = np.array([1,2,3,5,4])
 
-#2. 모델 구성 y=wx+b
+#2. 모델 구성 (y = wx+b)
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 
@@ -15,8 +15,8 @@ model.add(Dense(1, input_dim=1))
 
 #3. 컴파일, 훈련
 model.compile(loss='mae', optimizer='adam')
-model.fit(x, y, epochs=100)
+model.fit(x, y, epochs=2000)
 
 #4. 평가, 예측
 results = model.predict([6])
-print('6의 예측값 : ', results)
+print('6의 예측값 : ', results)     # 6의 예측값 :  [[5.8882227]]

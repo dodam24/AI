@@ -23,9 +23,12 @@ x_train, x_test, y_train, y_test = train_test_split(x, y,
     train_size=0.7, shuffle=True, random_state=123)
 
 #2. 모델 구성
-model=Sequential()
+model = Sequential()
 model.add(Dense(10, input_dim=8))
 model.add(Dense(11))
+model.add(Dense(65))
+model.add(Dense(32))
+model.add(Dense(48))
 model.add(Dense(10))
 model.add(Dense(75))
 model.add(Dense(1))
@@ -55,6 +58,7 @@ print(hist.history)
 print("==================================================")
 print(hist.history['loss'])
 
+#5. 시각화
 import matplotlib.pyplot as plt
 
 plt.figure(figsize=(9,6))
@@ -67,7 +71,7 @@ plt.xlabel('epochs')
 plt.ylabel('loss')
 plt.title('boston loss')
 plt.legend()
-# plt.legeng(loc='upper right')
+# plt.legend(loc='upper right')
 plt.show()
 
 y_predict = model.predict(x_test)
@@ -79,6 +83,3 @@ print("RMSE : ", RMSE(y_test, y_predict))
 
 r2 = r2_score(y_test, y_predict)
 print("R2 : ", r2)
-
-# 결과
-# Epoch 00019: early stopping
