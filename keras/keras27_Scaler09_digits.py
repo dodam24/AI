@@ -27,7 +27,7 @@ x_train, x_test, y_train, y_test = train_test_split(
     x, y, test_size=0.2, shuffle=True, random_state=333)
 
 scaler = MinMaxScaler() # minmaxscaler 정의
-#  scaler = StandardScaler()
+# scaler = StandardScaler()
 scaler.fit(x_train) # x값의 범위만큼의 가중치 생성
 x_train = scaler.transform(x_train)
 # x_train = scaler.fit_transform(x_test)

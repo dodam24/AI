@@ -11,7 +11,7 @@ y = np.array([1,2,3,5,4,6])
 model = Sequential()
 model.add(Dense(3, input_dim=1))   # 하나의 layer를 표시. Dense(output, input)
 model.add(Dense(5))   # hidden layer. (input layer를 뺀 나머지는 명시하지 않음).   # hidden layer 변경 가능
-model.add(Dense(4))   # 훈련 수, 노드 개수, layer 깊이 조절 가능 -> 하이퍼 파라미터 튜닝
+model.add(Dense(4))   # 훈련 수, 노드 개수, layer 깊이 조절 가능 -> 하이퍼파라미터 튜닝
 model.add(Dense(2))   
 model.add(Dense(1))   # output layer
 
@@ -23,7 +23,9 @@ model.fit(x, y, epochs=200, batch_size=7)   # 훈련
 loss = model.evaluate(x, y)   # loss값 반환. 3번과 4번의 loss값 비교
 print('loss : ', loss)
 result = model.predict([6])
-print('6의 결과: ', result)
+print('6의 결과 : ', result)
+
+# loss 값으로 정확성 판단 (predict 값보다 더 중요)
 
 """
 batch size가 1일 때: 5.991158
