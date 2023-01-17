@@ -6,6 +6,11 @@ from sklearn.model_selection import train_test_split
 #1. 데이터
 x = np.array(range(1,21))
 y = np.array([1,2,4,3,5,7,9,3,8,12,13,8,14,15,9,6,17,23,21,20])
+# z = np.array([[[1],[2],[3]]])
+
+print(x.shape)
+print(y.shape)
+# print(z.shape)
 
 x_train, x_test, y_train, y_test = train_test_split(x, y,
     train_size=0.7, shuffle=True, random_state=123)
@@ -28,7 +33,8 @@ print('loss : ', loss)
 
 y_predict = model.predict(x)
 
-import matplotlib.pyplot as plt
-plt.scatter(x, y)
-plt.plot(x, y_predict, color='red')
+# 시각화
+import matplotlib.pyplot as plt         # 그래프를 그려주는 라이브러리
+plt.scatter(x, y)                       # 산점도 그리기
+plt.plot(x, y_predict, color='red')     # 가중치 구해서 나온 예측값을 그래프로 그리기
 plt.show() 
