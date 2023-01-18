@@ -23,30 +23,27 @@ print(y)
 print(y.shape)  # (506,)
 
 print(dataset.feature_names)
-# ['CRIM' 'ZN' 'INDUS' 'CHAS' 'NOX' 'RM' 'AGE' 'DIS' 'RAD' 'TAX' 'PTRATIO'
-# 'B' 'LSTAT']
+# ['CRIM' 'ZN' 'INDUS' 'CHAS' 'NOX' 'RM' 'AGE' 'DIS' 'RAD' 'TAX' 'PTRATIO' 'B' 'LSTAT']
 print(dataset.DESCR)
 
 # train_test_split
 x_train, x_test, y_train, y_test = train_test_split(x, y,
-    test_size=0.3, shuffle=True, random_state=123)
-
-x_train, x_test, y_train, y_test = train_test_split(x, y,
-    train_size=0.3, shuffle=True, random_state=123)
+    train_size=0.7, shuffle=True, random_state=123)
 
 #2. 모델 구성
 model = Sequential()
 model.add(Dense(10, input_dim=13))
 model.add(Dense(55))
 model.add(Dense(20))
-model.add(Dense(350))
-model.add(Dense(700))
+model.add(Dense(35))
+model.add(Dense(70))
 model.add(Dense(1))
 
 #3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam',
             metrics=['mae'])
-model.fit(x_train, y_train, epochs=4000, batch_size=32)   # batch_size (default=32)
+model.fit(x_train, y_train, epochs=4000, batch_size=32,
+          validation_split=0.3)
 
 #4. 평가, 예측
 loss = model.evaluate(x_test, y_test)
@@ -62,6 +59,4 @@ print("RMSE : ", RMSE(y_test, y_predict))
 r2 = r2_score(y_test, y_predict)
 print("R2 : ", r2)
 
-# # 결과 : loss :  [27.709562301635742, 3.554419994354248]
-# RMSE :  5.263987122074212
-# R2 :  0.6859237951614205
+

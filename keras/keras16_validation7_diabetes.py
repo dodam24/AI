@@ -20,10 +20,7 @@ print(dataset.feature_names)
 print(dataset.DESCR)
 
 x_train, x_test, y_train, y_test = train_test_split(x, y,
-    test_size=0.3, shuffle=True, random_state=123)
-
-x_train, x_test, y_train, y_test = train_test_split(x, y,
-    train_size=0.3, shuffle=True, random_state=123)
+    train_size=0.7, shuffle=True, random_state=123)
 
 model = Sequential()
 model.add(Dense(10, input_dim=10))
@@ -35,7 +32,8 @@ model.add(Dense(1))
 
 #3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam', metrics=['mse'])
-model.fit(x_train, y_train, epochs=400, batch_size=16)
+model.fit(x_train, y_train, epochs=400, batch_size=16, 
+          validation_split=0.3)
 
 #4. 평가, 예측
 loss = model.evaluate(x_test, y_test)
@@ -51,7 +49,8 @@ print("RMSE : ", RMSE(y_test, y_predict))
 r2 = r2_score(y_test, y_predict)
 print("R2 : ", r2)
 
-# # # 결과 
-# loss :  [2952.908447265625, 2952.908447265625]
-# RMSE :  54.34066922811352
-# R2 :  0.4905223381000635
+""" 
+loss :  [3000.499267578125, 3000.499267578125]
+RMSE :  54.7768124243929
+R2 :  0.49543538502557816 
+"""

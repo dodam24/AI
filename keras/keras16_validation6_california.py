@@ -1,6 +1,4 @@
 import numpy as np
-import pandas as pd
-import sklearn as sk
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 from sklearn.model_selection import train_test_split
@@ -17,29 +15,27 @@ print(x.shape)   # (20640, 8)
 print(y.shape)   # (20640,)
 
 print(dataset.feature_names)
-# ['MedInc', 'HouseAge', 'AveRooms', 'AveBedrms', 'Population', 'AveOccup', 'La
-# titude', 'Longitude']
+# ['MedInc', 'HouseAge', 'AveRooms', 'AveBedrms', 'Population', 'AveOccup', 'Latitude', 'Longitude']
 print(dataset.DESCR)
 
 x_train, x_test, y_train, y_test = train_test_split(x, y,
-    test_size=0.3, shuffle=True, random_state=123)
-
-x_train, x_test, y_train, y_test = train_test_split(x, y,
-    train_size=0.3, shuffle=True, random_state=123)
+    train_size=0.7, shuffle=True, random_state=123)
 
 #2. 모델 구성
 model = Sequential()
 model.add(Dense(10, input_dim=8))
-model.add(Dense(7))
-model.add(Dense(21))
-model.add(Dense(5))
-model.add(Dense(32))
+model.add(Dense(15))
+model.add(Dense(25))
+model.add(Dense(35))
+model.add(Dense(20))
+model.add(Dense(15))
 model.add(Dense(1))
 
 #3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam',
             metrics=['mae'])
-model.fit(x_train, y_train, epochs=100, batch_size=32)
+model.fit(x_train, y_train, epochs=500, batch_size=32,
+          validation_split=0.3)     # 전체 데이터의 마지막 30%를 검증 데이터로 사용
 
 #4. 평가, 예측
 loss = model.evaluate(x_test, y_test)
@@ -55,7 +51,8 @@ print("RMSE : ", RMSE(y_test, y_predict))
 r2 = r2_score(y_test, y_predict)
 print("R2 : ", r2)
 
-# 결과
-# loss :  [0.7346333265304565, 0.6732928156852722]
-# RMSE :  0.8571076374327714
-# R2 :  0.4540192353663347
+""" 
+loss :  [0.6636654138565063, 0.5617427825927734]
+RMSE :  0.8146567675923694
+R2 :  0.498093378745457
+ """

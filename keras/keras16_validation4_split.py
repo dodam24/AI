@@ -10,8 +10,10 @@ y = np.array(range(1, 17))
 x_train, x_test, y_train, y_test = train_test_split(
     x, y, test_size=0.2, random_state=1234)
 
-print(x_train.shape, x_test.shape)
-print(y_train.shape, y_test.shape)
+print(x_train, x_test)  # [15  3 11  8  2 10  9  5  6  7  4 16] [14 12  1 13]   [random]
+print(y_train, y_test)  # [15  3 11  8  2 10  9  5  6  7  4 16] [14 12  1 13]   [random]
+print(x_train.shape, x_test.shape)  # (12,) (4,)
+print(y_train.shape, y_test.shape)  # (12,) (4,)
 
 #2. 모델
 model = Sequential()
@@ -33,3 +35,8 @@ print('loss : ', loss)
 
 result = model.predict([17])
 print("17의 예측값 : ", result)
+
+""" 
+loss :  6.469818458754162e-09
+17의 예측값 :  [[17.000011]] 
+"""

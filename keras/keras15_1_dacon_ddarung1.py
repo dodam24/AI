@@ -88,6 +88,7 @@ print(y)
 2178    216.0
 2179    170.0
 Name: count, Length: 1459 """
+
 print(y.shape)                          # (1459,)
 
 x_train, x_test, y_train, y_test = train_test_split(
