@@ -96,4 +96,4 @@ sampleSubmission.to_csv(path + 'sampleSubmission_01061225.csv')   # to_csvì— 'ê
 """ 
 loss :  69568.0390625
 RMSE :  263.7575252943852
- """
+"""
