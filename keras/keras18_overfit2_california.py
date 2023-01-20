@@ -4,6 +4,7 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 from sklearn.datasets import fetch_california_housing
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error, r2_score
 
 #1. 데이터
 dataset = fetch_california_housing()
@@ -11,13 +12,36 @@ x = dataset.data
 y = dataset.target
 
 print(x)
-print(x.shape)   # (20640, 8)   
+print(x.shape)  # (20640, 8)   
 print(y)
-print(y.shape)  # (20640, 1)
+print(y.shape)  # (20640,)
 
 print(dataset.feature_names)
+# ['MedInc', 'HouseAge', 'AveRooms', 'AveBedrms', 'Population', 'AveOccup', 'Latitude', 'Longitude']
 
 print(dataset.DESCR)
+""" .. _california_housing_dataset:
+
+California Housing dataset
+--------------------------
+
+**Data Set Characteristics:**
+
+    :Number of Instances: 20640
+
+    :Number of Attributes: 8 numeric, predictive attributes and the target
+
+    :Attribute Information:
+        - MedInc        median income in block group
+        - HouseAge      median house age in block group
+        - AveRooms      average number of rooms per household
+        - AveBedrms     average number of bedrooms per household
+        - Population    block group population
+        - AveOccup      average number of household members
+        - Latitude      block group latitude
+        - Longitude     block group longitude
+
+    :Missing Attribute Values: None """
 
 x_train, x_test, y_train, y_test = train_test_split(x, y,
     train_size=0.7, shuffle=True, random_state=123)
@@ -25,9 +49,12 @@ x_train, x_test, y_train, y_test = train_test_split(x, y,
 #2. 모델 구성
 model=Sequential()
 model.add(Dense(10, input_dim=8))
-model.add(Dense(11))
-model.add(Dense(10))
-model.add(Dense(75))
+model.add(Dense(12, activation='relu'))
+model.add(Dense(10, activation='relu'))
+model.add(Dense(32, activation='relu'))
+model.add(Dense(45, activation='relu'))
+model.add(Dense(24, activation='relu'))
+model.add(Dense(16, activation='relu'))
 model.add(Dense(1))
 
 #3. 컴파일, 훈련
@@ -49,6 +76,19 @@ print(hist.history)
 print("==================================================")
 print(hist.history['loss'])
 
+
+y_predict = model.predict(x_test)
+
+from sklearn.metrics import mean_squared_error, r2_score
+def RMSE(y_test, y_predict):
+    return np.sqrt(mean_squared_error(y_test, y_predict))
+print("RMSE : ", RMSE(y_test, y_predict))
+
+r2 = r2_score(y_test, y_predict)
+print("R2 : ", r2)
+
+
+# 그래프 설정
 import matplotlib.pyplot as plt
 
 plt.figure(figsize=(9,6))
@@ -63,13 +103,3 @@ plt.title('boston loss')
 plt.legend()
 # plt.legeng(loc='upper right')
 plt.show()
-
-y_predict = model.predict(x_test)
-
-from sklearn.metrics import mean_squared_error, r2_score
-def RMSE(y_test, y_predict):
-    return np.sqrt(mean_squared_error(y_test, y_predict))
-print("RMSE : ", RMSE(y_test, y_predict))
-
-r2 = r2_score(y_test, y_predict)
-print("R2 : ", r2)

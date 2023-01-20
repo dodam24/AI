@@ -3,48 +3,58 @@ import pandas as pd
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_squared_error, r2_score   # RMSE 만들기 위해 필요
+from sklearn.metrics import mean_squared_error, r2_score
 
 #1. 데이터
-path = './_data/ddarung/'   # . 은 현재 파일(study)을 의미. 데이터의 위치 표시
-train_csv = pd.read_csv(path + 'train.csv', index_col=0)
+path = './_data/ddarung/'    # . : 현재 파일(study)을 의미함 (데이터의 위치 표시)
+train_csv = pd.read_csv(path + 'train.csv', index_col=0)    # index_col=0: 0번째 컬럼은 index임을 명시 (데이터 아님)
 # train_csv = pd.read_csv('./_data/ddarung/train.csv', index_col=0)
-test_csv = pd.read_csv(path + 'test.csv', index_col=0)   # index_col=0 : 0번째 컬럼은 index임을 명시 (데이터 아님)
+test_csv = pd.read_csv(path + 'test.csv', index_col=0) 
 submission = pd.read_csv(path + 'submission.csv', index_col=0)
 
 print(train_csv)
-print(train_csv.shape)   # (1459, 10) -> input_dim=10. but count(=y)에 해당하므로 count 분리. 따라서 input_dim=9
+print(train_csv.shape)   # (1459, 10).  count는 y값이므로 count 분리. 따라서 input_dim=9
 print(submission.shape)   # (715, 1)
 
 print(train_csv.columns)   
-# Index(['hour', 'hour_bef_temperature', 'hour_bef_precipitation',
-#       'hour_bef_windspeed', 'hour_bef_humidity', 'hour_bef_visibility',
-#       'hour_bef_ozone', 'hour_bef_pm10', 'hour_bef_pm2.5', 'count'],
-#      dtype='object')
+""" Index(['hour', 'hour_bef_temperature', 'hour_bef_precipitation',
+       'hour_bef_windspeed', 'hour_bef_humidity', 'hour_bef_visibility',
+       'hour_bef_ozone', 'hour_bef_pm10', 'hour_bef_pm2.5', 'count'],
+      dtype='object') """
 
 print(train_csv.info())
-# #   Column                  Non-Null Count  Dtype
-#---  ------                  --------------  -----
-# 0   hour                    1459 non-null   int64
-# 1   hour_bef_temperature    1457 non-null   float64   # 결측치 2개 (1459개 기준)
-# 2   hour_bef_precipitation  1457 non-null   float64
+""" 
+Data columns (total 10 columns):
+ #   Column                  Non-Null Count  Dtype
+---  ------                  --------------  -----
+ 0   hour                    1459 non-null   int64
+ 1   hour_bef_temperature    1457 non-null   float64    # 결측치 2개 (1459개 기준)
+ 2   hour_bef_precipitation  1457 non-null   float64
+ 3   hour_bef_windspeed      1450 non-null   float64
+ 4   hour_bef_humidity       1457 non-null   float64
+ 5   hour_bef_visibility     1457 non-null   float64
+ 6   hour_bef_ozone          1383 non-null   float64
+ 7   hour_bef_pm10           1369 non-null   float64
+ 8   hour_bef_pm2.5          1342 non-null   float64
+ 9   count                   1459 non-null   float64
+ """
 
-# # 결측치 처리 방법 
+# 결측치 처리 방법:
 # 1. 결측치 있는 데이터 삭제 (null값)
-# 2. 임의의 값 설정 (중간 값 or 0 입력)
+# 2. 임의의 값 설정 (중간 값, 0)
 
 print(test_csv.info())
 print(train_csv.describe())
 
-### 결측치 처리 1. 제거 ###
+##### 결측치 처리 방법 1. 제거 #####
+print(train_csv.isnull().sum())     # null값의 개수 확인
+train_csv = train_csv.dropna()      # 결측값이 들어있는 행 전체를 제거
 print(train_csv.isnull().sum())
-train_csv = train_csv.dropna()
-print(train_csv.isnull().sum())
-print(train_csv.shape)   # (1328, 10)
+print(train_csv.shape)              # (1328, 10)
 
-x = train_csv.drop(['count'], axis=1)   # count 컬럼 삭제 (컬럼 10개에서 9개로 변경됨)
+x = train_csv.drop(['count'], axis=1)   # count 컬럼 삭제 (컬럼 10개에서 9개로 변경됨), axis=1: 열 기준
 print(x)   # [1459 rows x 9 columns]
-y = train_csv['count']   # column(결과)만 추출 
+y = train_csv['count']   # count(결과)만 추출 
 print(y)
 print(y.shape)   # (1459,)
 
@@ -84,6 +94,7 @@ print(hist.history)
 print("==================================================")
 print(hist.history['loss'])
 
+# 그래프 설정
 import matplotlib.pyplot as plt
 
 plt.figure(figsize=(9,6))
@@ -102,7 +113,7 @@ plt.show()
 y_predict = model.predict(x_test)   # x_test로 y_predict 예측(?)
 print(y_predict)   # 결측치로 인해 nan값이 출력됨
 
-# 결측치 수정
+# 결측치 수정할 것!
 
 def RMSE(y_test, y_predict):   # RMSE 정의
     return np.sqrt(mean_squared_error(y_test, y_predict))

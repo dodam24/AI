@@ -3,6 +3,20 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 from sklearn.model_selection import train_test_split
 
+
+# matplotlib 폰트 설정 -한글 폰트 깨짐 처리
+from matplotlib import font_manager, rc     
+
+font_path = 'C:/Windows/Fonts/malgun.ttf'   # 폰트 경로
+font_name = font_manager.FontProperties(fname=font_path).get_name()     # 폰트 이름 가져오기
+rc('font', family=font_name)    # rc 함수를 이용해 폰트의 설정 변경 가능                            
+
+import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.rcParams['font.family'] ='Malgun Gothic'     # rcParams 설정을 통해 기본값 설정
+matplotlib.rcParams['axes.unicode_minus'] = False       # 마이너스 기호 깨짐 방지
+
+
 #1. 데이터
 datasets = load_boston()
 x = datasets.data
@@ -15,11 +29,11 @@ x_train, x_test, y_train, y_test = train_test_split(
 
 #2. 모델 구성
 model = Sequential()
-# model.add(Dense(5, input_dim=13))   # input_dim은 행과 열
-model.add(Dense(5, input_shape=(13,))) # 다차원일 경우, input_shape 사용
-model.add(Dense(40000))
+# model.add(Dense(5, input_dim=13))         # input_dim은 행과 열
+model.add(Dense(5, input_shape=(13,)))      # 다차원일 경우, input_shape 사용
+model.add(Dense(40))
 model.add(Dense(3))
-model.add(Dense(20000))
+model.add(Dense(20))
 model.add(Dense(1))
 
 #3. 컴파일, 훈련
@@ -39,21 +53,19 @@ print(hist.history)
 print("==================================================")
 print(hist.history['loss'])
 
-import matplotlib.pyplot as plt
-import matplotlib
-matplotlib.rcParams['font.family'] ='Malgun Gothic'
-matplotlib.rcParams['axes.unicode_minus'] = False
-
-plt.figure(figsize=(9,6))
+# matplotlib 그래프 설정
+plt.figure(figsize=(9,6))   # 기본 크기 지정
 plt.plot(hist.history['loss'], c='red', 
-         marker='.', label='loss')  # plt.plot(): x, y 지점에 선 긋기
+         marker='.', label='loss')      # plt.plot(): x, y 지점에 선 긋기
 plt.plot(hist.history['val_loss'], c='blue', 
          marker='.', label='val_loss')
-plt.grid()
-plt.xlabel('epochs')
-plt.ylabel('loss')
+plt.grid()      # 격자 설정
+plt.xlabel('epochs')    # x축 레이블 설정
+plt.ylabel('loss')      # y축 레이블 설정
 # plt.title('boston loss')
-plt.title('보스톤 손실함수')
-plt.legend()
+plt.title('보스톤 손실함수')    # 한글 폰트 깨짐 설정해서 문제 해결할 것!
+plt.legend()    # 범례 표시
 # plt.legeng(loc='upper right')
 plt.show()
+
+
