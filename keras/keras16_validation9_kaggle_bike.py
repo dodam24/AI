@@ -30,8 +30,8 @@ Index(['season', 'holiday', 'workingday', 'weather', 'temp', 'atemp',
 
 # x는 casual, registered, count 제외
 # y는 train에서 count만 가져올 것!
-train_csv=train_csv.drop(['casual', 'registered'], axis=1)      # casual, registered 열 제거
-x = train_csv.drop(['count'], axis=1)       # count 열 제거
+train_csv=train_csv.drop(['casual', 'registered'], axis=1)  # casual, registered 열 제거
+x = train_csv.drop(['count'], axis=1)   # count 열 제거
 print(x)   # [10886 rows x 10 columns]
 y = train_csv['count']   # column(결과)만 추출
 print(y)   # [10886 rows x 10 columns]
@@ -57,7 +57,7 @@ model.add(Dense(65, activation='relu'))
 model.add(Dense(33))
 model.add(Dense(6, activation='relu'))
 model.add(Dense(24, activation='relu'))
-model.add(Dense(1))                                 # 마지막에 sigmoid 함수 X (마지막 값이 모두 0~1로 바뀌기 때문에)
+model.add(Dense(1))     # 마지막에 sigmoid 함수 X (마지막 값이 모두 0~1로 바뀌기 때문에)
 
 
 #3. 컴파일, 훈련

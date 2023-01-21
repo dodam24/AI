@@ -3,7 +3,7 @@ import pandas as pd
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_squared_error, r2_score   # RMSE 만들기 위해 필요
+from sklearn.metrics import mean_squared_error, r2_score
 
 #1. 데이터
 path = './_data/ddarung/'   # . 은 현재 파일(study)을 의미. 데이터의 위치 표시

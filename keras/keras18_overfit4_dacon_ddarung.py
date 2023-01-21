@@ -47,7 +47,7 @@ print(test_csv.info())
 print(train_csv.describe())
 
 ##### 결측치 처리 방법 1. 제거 #####
-print(train_csv.isnull().sum())     # null값의 개수 확인
+print(train_csv.isnull().sum())     # null값의 수 확인
 train_csv = train_csv.dropna()      # 결측값이 들어있는 행 전체를 제거
 print(train_csv.isnull().sum())
 print(train_csv.shape)              # (1328, 10)

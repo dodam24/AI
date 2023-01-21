@@ -4,31 +4,22 @@
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 import numpy as np
+import pandas as pd
 from sklearn.model_selection import train_test_split
 
 import sklearn as sk
 print(sk.__version__)   # 1.1.3
 
-from sklearn.datasets import load_boston
-
 
 #1. 데이터
-dataset = load_boston()   # boston의 부동산 관련 데이터
-x = dataset.data
-y = dataset.target
+path = './_data/ddarung/'
 
-print(x)
-print(x.shape)  # (506, 13)
-print(y)
-print(y.shape)  # (506,)
+# CSV 파일 가져오기
+train_csv = pd.read_csv(path + 'train.csv', index_col=0)    # 첫 번째 열인 '~' 변수를 Index로 지정 
+test_csv = pd.read_csv(path + 'test.csv')
+submission = pd.read_csv
 
-print(dataset.feature_names)
-# ['CRIM' 'ZN' 'INDUS' 'CHAS' 'NOX' 'RM' 'AGE' 'DIS' 'RAD' 'TAX' 'PTRATIO' 'B' 'LSTAT']
-print(dataset.DESCR)
 
-# train_test_split
-x_train, x_test, y_train, y_test = train_test_split(x, y,
-    train_size=0.7, shuffle=True, random_state=123)
 
 #2. 모델 구성
 model = Sequential()
@@ -53,10 +44,12 @@ y_predict = model.predict(x_test)
 
 from sklearn.metrics import mean_squared_error, r2_score
 def RMSE(y_test, y_predict):
-    return np.sqrt(mean_squared_error(y_test, y_predict))
+    return np.sqrt(mean_squared_error(y_test, y_predict))   # RMSE: MSE의 제곱근 (np.sqrt)
 print("RMSE : ", RMSE(y_test, y_predict))
 
 r2 = r2_score(y_test, y_predict)
 print("R2 : ", r2)
 
+# 제출할 파일
+y_submit = model.predcit(test_csv)
 
