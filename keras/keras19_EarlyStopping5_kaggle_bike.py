@@ -7,36 +7,33 @@ from sklearn.metrics import mean_squared_error
 
 #1. 데이터
 path = './_data/bike/'
-train_csv = pd.read_csv(path + 'train.csv', index_col=0)
+train_csv = pd.read_csv(path + 'train.csv', index_col=0)    # 0번째 컬럼은 index임을 명시 (데이터 아님)
 test_csv = pd.read_csv(path + 'test.csv', index_col=0)
 sampleSubmission = pd.read_csv(path + 'sampleSubmission.csv', index_col=0)
 
 print(train_csv)
-print(train_csv.shape)   # (10886, 11)   # count=y(결과)에 해당하므로 input_dim=10
+print(train_csv.shape)          # (10886, 11).   # count는 결과(y)값이므로 input_dim=10 대입
 print(sampleSubmission.shape)   # (6493, 1)
 
 print(train_csv.columns)
-#Index(['season', 'holiday', 'workingday', 'weather', 'temp', 'atemp',
-#        'humidity', 'windspeed', 'casual', 'registered', 'count'],
-#       dtype='object').
+""" Index(['season', 'holiday', 'workingday', 'weather', 'temp', 'atemp',
+        'humidity', 'windspeed', 'casual', 'registered', 'count'], dtype='object') """
 
 # print(train_csv.info())
 # print(test_csv.info())
 # print(train_csv.describe())
 
-# *** x는 casual, registered, count 빼고 y는 train에서 count만 가져올 것!
+# x값: casual, registered 컬럼과 count 컬럼 제외
 train_csv=train_csv.drop(['casual', 'registered'], axis=1)
 x = train_csv.drop(['count'], axis=1)
 print(x)   # [10886 rows x 10 columns]
+# y값: train 데이터에서 count 컬럼(결과) 값만 가져올 것!
 y = train_csv['count']   # column(결과)만 추출
 print(y)   # [10886 rows x 10 columns]
 print(y.shape)   # (10886,)
 
 x_train, x_test, y_train, y_test = train_test_split(x, y,
-    test_size=0.3, shuffle=True, random_state=123)
-
-x_train, x_test, y_train, y_test = train_test_split(x, y,
-    train_size=0.3, shuffle=True, random_state=123)  
+    train_size=0.7, shuffle=True, random_state=123)  
 
 print(x_train.shape, x_test.shape)   # (7620, 10) (3266, 10)
 print(y_train.shape, y_test.shape)   # (7620,) (3266,)
@@ -61,15 +58,17 @@ model.add(Dense(1))
 #3. 컴파일, 훈련
 import time 
 model.compile(loss='mse', optimizer='adam')
+
 from tensorflow.keras.callbacks import EarlyStopping
-EarlyStopping = EarlyStopping(monitor='val_loss', 
+earlystopping = EarlyStopping(monitor='val_loss', 
                               mode='min',
                               patience=10, 
                               restore_best_weights=True,
                               verbose=1)
 start = time.time()
+
 hist = model.fit(x_train, y_train, epochs=700, batch_size=32, 
-          validation_split=0.2, callbacks=[EarlyStopping], 
+          validation_split=0.2, callbacks=[earlystopping], 
           verbose=3)
 end = time.time()
 
@@ -85,6 +84,8 @@ print(hist.history)
 print("==================================================")
 print(hist.history['loss'])
 
+
+# 시각화
 import matplotlib.pyplot as plt
 
 plt.figure(figsize=(9,6))
@@ -99,6 +100,7 @@ plt.title('boston loss')
 plt.legend()
 # plt.legeng(loc='upper right')
 plt.show()
+
 
 y_predict = model.predict(x_test)  # x_test로 y_predict 예측
 print(y_predict)
@@ -119,6 +121,7 @@ print(sampleSubmission)
 
 sampleSubmission.to_csv(path + 'sampleSubmission_01091535.csv')   # to_csv에 경로와 파일명 입력
 
-# 결과
-# Epoch 00140: early stopping
-# loss :  24381.33984375
+
+""" Epoch 00056: early stopping
+103/103 [==============================] - 0s 413us/step - loss: 24211.4629
+loss :  24211.462890625 """

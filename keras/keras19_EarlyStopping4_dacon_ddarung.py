@@ -17,26 +17,22 @@ print(train_csv.shape)   # (1459, 10) -> input_dim=10. but count(=y)에 해당�
 print(submission.shape)   # (715, 1)
 
 print(train_csv.columns)   
-# Index(['hour', 'hour_bef_temperature', 'hour_bef_precipitation',
-#       'hour_bef_windspeed', 'hour_bef_humidity', 'hour_bef_visibility',
-#       'hour_bef_ozone', 'hour_bef_pm10', 'hour_bef_pm2.5', 'count'],
-#      dtype='object')
+""" Index(['hour', 'hour_bef_temperature', 'hour_bef_precipitation',
+       'hour_bef_windspeed', 'hour_bef_humidity', 'hour_bef_visibility',
+       'hour_bef_ozone', 'hour_bef_pm10', 'hour_bef_pm2.5', 'count'], dtype='object') """
 
 print(train_csv.info())
-# #   Column                  Non-Null Count  Dtype
-#---  ------                  --------------  -----
-# 0   hour                    1459 non-null   int64
-# 1   hour_bef_temperature    1457 non-null   float64   # 결측치 2개 (1459개 기준)
-# 2   hour_bef_precipitation  1457 non-null   float64
 
-# # 결측치 처리 방법 
-# 1. 결측치 있는 데이터 삭제 (null값)
-# 2. 임의의 값 설정 (중간 값 or 0 입력)
+""" 
+결측치 처리 방법:
+1. 결측치 있는 데이터 삭제 (null값)
+2. 임의의 값 설정 (중간 값 or 0 입력) 
+"""
 
 print(test_csv.info())
 print(train_csv.describe())
 
-### 결측치 처리 1. 제거 ###
+##### 결측치 처리 1. 제거 #####
 print(train_csv.isnull().sum())
 train_csv = train_csv.dropna()
 print(train_csv.isnull().sum())
@@ -67,15 +63,17 @@ model.add(Dense(1))
 #3. 컴파일, 훈련
 import time 
 model.compile(loss='mse', optimizer='adam', metrics=['mse'])
+
 from tensorflow.keras.callbacks import EarlyStopping
-EarlyStopping = EarlyStopping(monitor='val_loss', 
+earlystopping = EarlyStopping(monitor='val_loss', 
                               mode='min',
                               patience=10, 
                               restore_best_weights=True,
                               verbose=1)
 start = time.time()
+
 hist = model.fit(x_train, y_train, epochs=400, batch_size=32, 
-          validation_split=0.2, callbacks=[EarlyStopping],
+          validation_split=0.2, callbacks=[earlystopping],
           verbose=2)
 end = time.time()
 
@@ -90,6 +88,7 @@ print(hist.history)
 print("==================================================")
 print(hist.history['loss'])
 
+# 데이터 시각화
 import matplotlib.pyplot as plt
 
 plt.figure(figsize=(9,6))
@@ -105,7 +104,7 @@ plt.legend()
 # plt.legeng(loc='upper right')
 plt.show()
 
-y_predict = model.predict(x_test)   # x_test로 y_predict 예측(?)
+y_predict = model.predict(x_test)   # x_test로 y_predict 예측
 print(y_predict)   # 결측치로 인해 nan값이 출력됨
 
 # 결측치 수정
@@ -126,11 +125,11 @@ print(y_submit.shape)   # (715, 1)
 # submission_0105.csv를 완성시킬 것
 
 print(submission)
-submission['count'] = y_submit   # submission의 count열에 y_submit 대입
+submission['count'] = y_submit   # submission의 count열에 y_submit값 대입
 print(submission)
 
-submission.to_csv(path + 'submission_01091535.csv')   # to_csv에 경로와 파일명 입력
+submission.to_csv(path + 'submission_01091535.csv')   # to_csv에 '경로'와 '파일명' 입력
 
-# 결과
-# Epoch 00177: early stopping
-# loss :  [2913.16455078125, 2913.16455078125]
+
+""" Epoch 00177: early stopping
+loss :  [2913.16455078125, 2913.16455078125] """

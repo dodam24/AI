@@ -21,7 +21,6 @@ print(train_csv.columns)
        'hour_bef_windspeed', 'hour_bef_humidity', 'hour_bef_visibility',
        'hour_bef_ozone', 'hour_bef_pm10', 'hour_bef_pm2.5', 'count'],
       dtype='object') """
- 
       
 print(train_csv.info())
 """ Data columns (total 10 columns):
@@ -58,7 +57,7 @@ print(test_csv.info())
  8   hour_bef_pm2.5          679 non-null    float64 """
 
 
-print(train_csv.describe())
+# print(train_csv.describe())
 """ hour  hour_bef_temperature  hour_bef_precipitation  hour_bef_windspeed  hour_bef_humidity  hour_bef_visibility  hour_bef_ozone  hour_bef_pm10  hour_bef_pm2.5        count
 count  1459.000000           1457.000000             1457.000000         1450.000000        1457.000000          1457.000000     1383.000000    1369.000000     1342.000000  1459.000000
 mean     11.493489             16.717433                0.031572            2.479034          52.231297          1405.216884        0.039149      57.168736       30.327124   108.563400
@@ -68,7 +67,6 @@ min       0.000000              3.100000                0.000000            0.00
 50%      11.000000             16.600000                0.000000            2.300000          51.000000          1577.000000        0.039000      51.000000       26.000000    96.000000
 75%      17.500000             20.100000                0.000000            3.400000          69.000000          1994.000000        0.052000      69.000000       37.000000   150.000000
 max      23.000000             30.000000                1.000000            8.000000          99.000000          2000.000000        0.125000     269.000000       90.000000   431.000000 """
-
 
 x = train_csv.drop(['count'], axis=1)   # count 컬럼 삭제 (컬럼 개수 10개에서 9개로 변경)
 print(x)                                # [1459 rows x 9 columns]
@@ -91,6 +89,19 @@ Name: count, Length: 1459 """
 
 print(y.shape)                          # (1459,)
 
+
+# 결측치 처리 방법: 
+# 모델 돌리기 전에 결측치 삭제
+print(train_csv.isnull().sum())     # null값의 개수 확인
+train_csv = train_csv.dropna()      # 결측값이 들어있는 행 전체를 제거
+print(train_csv.isnull().sum())     # 결측치 제거 후, null값의 개수 다시 확인
+print(train_csv.shape)              # (1328, 10) 
+                                    # 결측치 제거 전에는 train_csv.shape = (1459, 10)
+
+x = train_csv.drop(['count'], axis=1)   # train 데이터의 count 컬럼 삭제
+y = train_csv['count']                  # count(결과)만 추출
+
+
 x_train, x_test, y_train, y_test = train_test_split(
     x, y, shuffle=True, train_size=0.7, random_state=1234
 )
@@ -100,7 +111,7 @@ print(y_train.shape, y_test.shape)  # (1021,) (438,)
 
 #2. 모델 구성
 model=Sequential()
-model.add(Dense(10,input_dim=9))
+model.add(Dense(10, input_dim=9))
 model.add(Dense(10))
 model.add(Dense(10))
 model.add(Dense(10))
@@ -126,4 +137,11 @@ rmse = RMSE(y_test, y_predict)
 print("RMSE : ", rmse)
 
 # 제출할 파일
-y_submit = model.predict(test_csv)
+y_submit = model.predict(test_csv)      # test_csv의 값을 예측해서 y_submit에 대입
+submission['count'] = y_submit          # y_submit의 값을 submission 파일의 count에 대입
+print(submission)
+
+submission.to_csv(path + 'submission_01212005.csv')     # to_csv에 '경로'와 '파일명' 입력
+
+
+# RMSE : 77.8888497835806

@@ -49,7 +49,6 @@ Data columns (total 10 columns):
 2. 임의의 값 설정 (중간 값, 0) 
 """
 
-
 print(test_csv.info())      # non-null: 결측치 (데이터가 없는 것)
                             # 비어있는 값에 임의의 값을 넣어서 테스트 가능. 아예 데이터를 삭제하는 방법도 있음)
 """ 
@@ -68,6 +67,8 @@ Data columns (total 9 columns):
  """
 # print(train_csv.describe())
 
+x = train_csv.drop(['count'], axis=1)   # count 열 삭제
+y = train_csv['count']                  # column(결과)만 추출
 
 ##### 결측치 처리 방법 1. 삭제 #####
 print(train_csv.isnull().sum())     # null값의 개수 확인
@@ -110,6 +111,7 @@ y = train_csv['count']                  # count column(=결과)만 추출
 print(y)
 print(y.shape)                          # (1459,)
 
+
 # 빨간점 찍고 F5 누르면 중단점 실행
 x_train, x_test, y_train, y_test = train_test_split(
     x, y, shuffle=True, train_size=0.7, random_state=1234
@@ -120,7 +122,7 @@ print(y_train.shape, y_test.shape)   # (929,) (399,)
 
 #2. 모델 구성
 model=Sequential()
-model.add(Dense(1,input_dim=9))
+model.add(Dense(1, input_dim=9))
 model.add(Dense(15))
 model.add(Dense(32))
 model.add(Dense(24))
@@ -137,7 +139,7 @@ end = time.time()
 loss = model.evaluate(x_test, y_test)
 print('loss : ', loss)
 
-y_predict = model.predict(x_test)   # 그냥 돌리면 결측치로 인해 nan 값이 출력 (에러)
+y_predict = model.predict(x_test)   # 그냥 돌리면 결측치로 인해 nan값이 출력됨 (에러)
 print(y_predict)
 
 

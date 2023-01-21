@@ -46,7 +46,7 @@ print(y_train.shape, y_test.shape)   # (7620,) (3266,)
 
 #2. 모델 구성
 model=Sequential()
-model.add(Dense(4,input_dim=8, activation='relu'))   # activation의 defalut값: linear
+model.add(Dense(4,input_dim=8, activation='relu'))   # activation의 defalut값 = linear
 model.add(Dense(1, activation='relu'))
 model.add(Dense(28))
 model.add(Dense(3, activation='relu'))
