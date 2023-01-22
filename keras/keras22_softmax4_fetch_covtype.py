@@ -41,7 +41,7 @@ y = ohe.fit_transform(y)
 
 print(y)
 print(type(y))      # <class 'numpy.ndarray'>
-print(y.shape)      # (581012, 7)
+print(y.shape)      # (581012, 8)
 
 x_train, x_test, y_train, y_test = train_test_split(
     x, y, shuffle=True, random_state=333, test_size=0.2,stratify=y)
@@ -93,6 +93,3 @@ acc = accuracy_score(y_test, y_predict)         # 정확도 (예측값과 원래
 print(acc)
 
 print('time : ', end - start)
-
-
-# ValueError: Shapes (None, 7) and (None, 8) are incompatible
