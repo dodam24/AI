@@ -25,7 +25,8 @@ scaler = MinMaxScaler()
 x_train = scaler.fit_transform(x_train)
 x_test = scaler.transform(x_test)
 
-""" #2. 모델링 (함수형)
+""" 
+#2. 모델링 (함수형)
 input1 = Input(shape=(13,))
 dense1 = Dense(50, activation='relu')(input1)
 dense2 = Dense(40, activation='sigmoid')(dense1)
@@ -51,9 +52,10 @@ hist = model.fit(x_train, y_train,
                  callbacks=[earlyStopping],
                  verbose=1)
  """
+ 
 # 파일 불러오기
 path = 'C:/study/_save/'
-model = load_model(path + 'keras29-3_save_model.h5')
+model = load_model(path + 'keras29_3_save_model.h5')
 # keras29_3_save_model.py와 동일한 가중치
 
 
@@ -68,3 +70,7 @@ print("RMSE : ", RMSE(y_test, y_predict))
 
 r2 = r2_score(y_test, y_predict)
 print("R2 : ", r2)
+
+
+""" RMSE :  4.316053493364515
+R2 :  0.8100681762271829 """

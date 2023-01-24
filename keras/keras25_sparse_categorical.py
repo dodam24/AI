@@ -19,7 +19,10 @@ print(x)
  [4.6 3.1 1.5 0.2]
  [5.  3.6 1.4 0.2]
  [5.4 3.9 1.7 0.4] 
- ...]]
+ .
+ .
+ .
+ ]]
  """
 
 print(y)
@@ -33,7 +36,8 @@ print(y)
  
 print(x.shape, y.shape)     # (150, 4), (150,)
 
-# from tensorflow.keras.utils import to_categorical     # one hot encoding 통해 y.shape = (150, 3)으로 변경됨
+
+# from tensorflow.keras.utils import to_categorical     # one hot encoding을 통해서 y.shape = (150, 3)으로 변경됨
 # y = to_categorical(y)
 # print(y)
 # print(y.shape)    # (150, 3)
@@ -89,10 +93,12 @@ print("y_test(원래값) : " , y_test)
 # acc = accuracy_score(y_test, y_predict)
 # print(acc)
 
+
 """ 원-핫 인코딩 하는 방법 (3가지)
 1. keras의 to_categorical
 2. pandas의 get_dummies
 3. sklearn의 OneHotEncoder """
+
 
 """
 # #################### keras to_categorical ####################
@@ -132,11 +138,11 @@ print(y.shape)
 """
 # #################### sklearn OneHotEncoder ####################
 from sklearn.preprocessing import OneHotEncoder
-ohe = OneHotEncoder()       # 정의
-# y = ohe.fit_transform()   # shape를 맞추는 작업
-y = ohe.fit(y)              # OneHotEncoder는 2차원의 데이터를 받음
-y = y.reshape()             # (581012, 1) 형태로 변경 (데이터의 내용과 순서만 바뀌지 않으면 됨)
-y = ohe.transform(y)
+ohe = OneHotEncoder()           # 원-핫 인코더에 대한 정의
+y = ohe.fit_transform()         # shape를 맞추는 작업
+    # y = ohe.fit(y)            # OneHotEncoder는 2차원의 데이터를 받음
+y = y.reshape()                 # (581012, 1) 형태로 변경 (데이터의 내용과 순서만 바뀌지 않으면 됨)
+    # y = ohe.transform(y)
 y = y.toarray()
 
 # print(y[:15])
@@ -154,10 +160,10 @@ y = y.reshape(581012, 1)    # 원-핫 인코딩 전에 reshape로 형태 변경
 print(y.shape)
 from sklearn.preprocessing import OneHotEncoder
 ohe = OneHotEncoder()
-y = ohe.fit_transform       # fit과 transform을 한 번에 수행. 아래 두 줄과 같은 코드
-# ohe.fit(y)                # 원-핫 인코딩: to array(numpy) 형태로 변경  
-# y = ohe.transform(y)
-y = y.toarray()             # numpy 형태로 변경
+y = ohe.fit_transform           # fit과 transform을 한 번에 수행. 아래 두 줄과 같은 코드
+    # ohe.fit(y)                # 원-핫 인코딩: to array(numpy) 형태로 변경  
+    # y = ohe.transform(y)
+y = y.toarray()                 # numpy 형태로 변경
 print(type(y))
 
 # print(y[:15])

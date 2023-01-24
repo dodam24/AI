@@ -13,8 +13,8 @@ test_csv = pd.read_csv(path + 'test.csv', index_col=0)   # index_col=0 : 0번째
 submission = pd.read_csv(path + 'submission.csv', index_col=0)
 
 print(train_csv)
-print(train_csv.shape)   # (1459, 10) -> input_dim=10. but count(=y)에 해당하므로 count 분리. 따라서 input_dim=9
-print(submission.shape)   # (715, 1)
+print(train_csv.shape)      # (1459, 10) -> input_dim=10. but count(=y)에 해당하므로 count 분리. 따라서 input_dim=9
+print(submission.shape)     # (715, 1)
 
 print(train_csv.columns)   
 """ Index(['hour', 'hour_bef_temperature', 'hour_bef_precipitation',
@@ -39,10 +39,10 @@ print(train_csv.isnull().sum())
 print(train_csv.shape)   # (1328, 10)
 
 x = train_csv.drop(['count'], axis=1)   # count 컬럼 삭제 (컬럼 10개에서 9개로 변경됨)
-print(x)   # [1459 rows x 9 columns]
-y = train_csv['count']   # column(결과)만 추출 
+print(x)                                # [1459 rows x 9 columns]
+y = train_csv['count']                  # column(결과)만 추출 
 print(y)
-print(y.shape)   # (1459,)
+print(y.shape)                          # (1459,)
 
 # 빨간점 찍고 F5 누르면 중단점 실행
 x_train, x_test, y_train, y_test = train_test_split(

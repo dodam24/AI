@@ -47,8 +47,8 @@ print('accuracy : ', accuracy)
 y_predict = model.predict(x_test)   # sigmoid 함수 통과 후의 값
 y_predict = y_predict > 0.5
 
-print(y_predict)    # [9.7433567e-01] : 실수 값으로 출력됨 -> 정수형으로 변환
-print(y_test)       # [1 0 1 1 0 1 1 1 0 1] : 정수
+print(y_predict)    # [9.7433567e-01]: 실수 값으로 출력됨 -> 정수형으로 변환
+print(y_test)       # [1 0 1 1 0 1 1 1 0 1]: 정수
 
 from sklearn.metrics import r2_score, accuracy_score    # accuracy score 추가
 # acc = accuracy_score(y_test, y_predict)

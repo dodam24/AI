@@ -30,24 +30,27 @@ print(train_csv.info())
 # 1   hour_bef_temperature    1457 non-null   float64   # 결측치 2개 (1459개 기준)
 # 2   hour_bef_precipitation  1457 non-null   float64
 
-# # 결측치 처리 방법 
-# 1. 결측치 있는 데이터 삭제 (null값)
-# 2. 임의의 값 설정 (중간 값 or 0 입력)
+""" 
+결측치 처리 방법 
+1. 결측치 있는 데이터 삭제 (null값)
+2. 임의의 값 설정 (중간 값 or 0 입력) """
 
 print(test_csv.info())
 print(train_csv.describe())
 
-### 결측치 처리 1. 제거 ###
-print(train_csv.isnull().sum())
-train_csv = train_csv.dropna()
-print(train_csv.isnull().sum())
-print(train_csv.shape)   # (1328, 10)
 
-x = train_csv.drop(['count'], axis=1)   # count 컬럼 삭제 (컬럼 10개에서 9개로 변경됨)
-print(x)   # [1459 rows x 9 columns]
-y = train_csv['count']   # column(결과)만 추출 
+##### 결측치 처리 1. 제거 #####
+x = train_csv.drop(['count'], axis=1)       # count 컬럼 삭제 (컬럼 10개에서 9개로 변경됨)
+print(x)                                    # [1459 rows x 9 columns]
+y = train_csv['count']                      # column(결과)만 추출 
 print(y)
-print(y.shape)   # (1459,)
+print(y.shape)                              # (1459,)
+
+print(train_csv.isnull().sum())             # null값의 개수 확인
+train_csv = train_csv.dropna()              # 결측값이 들어있는 행 전체를 제거
+print(train_csv.isnull().sum())             # 결측치 제거 후, null값위 개수 다시 확인
+print(train_csv.shape)                      # (1328, 10)
+
 
 # 빨간점 찍고 F5 누르면 중단점 실행
 x_train, x_test, y_train, y_test = train_test_split(
@@ -57,13 +60,14 @@ x_train, x_test, y_train, y_test = train_test_split(
 print(x_train.shape, x_test.shape)   # (929, 9) (399, 9)
 print(y_train.shape, y_test.shape)   # (929,) (399,)
 
-scaler = MinMaxScaler() # minmaxscaler 정의
-#  scaler = StandardScaler()
-scaler.fit(x_train) # x값의 범위만큼의 가중치 생성
+# 데이터 전처리
+scaler = MinMaxScaler()                     # minmaxscaler 정의
+# scaler = StandardScaler()
+scaler.fit(x_train)                         # x값의 범위만큼의 가중치 생성
 x_train = scaler.transform(x_train)
 # x_train = scaler.fit_transform(x_test)
-x_test = scaler.transform(x_test)# 시작 (transform해야 바뀐다.)
-test_csv = scaler.transform(test_csv) # 제출 파일도 스케일링 해주어야 함.
+x_test = scaler.transform(x_test)           # x_train fit한 가중치 값 범위에 맞춰서 x_test 데이터 변환
+test_csv = scaler.transform(test_csv)       # 제출 파일도 스케일링 해주어야 함.
 
 #2. 모델 구성
 model=Sequential()
@@ -99,6 +103,21 @@ print(hist.history)
 print("==================================================")
 print(hist.history['loss'])
 
+
+y_predict = model.predict(x_test)   # x_test로 y_predict 예측
+print(y_predict)                    # 결측치로 인해 nan값이 출력됨
+
+# 결측치 수정
+
+def RMSE(y_test, y_predict):   # RMSE 정의
+    return np.sqrt(mean_squared_error(y_test, y_predict))
+rmse = RMSE(y_test, y_predict)
+print("RMSE : ", rmse)   # RMSE : 81.93167235968318
+
+print("걸린 시간 : ", end - start)
+
+
+# 시각화
 import matplotlib.pyplot as plt
 
 plt.figure(figsize=(9,6))
@@ -114,20 +133,9 @@ plt.legend()
 # plt.legeng(loc='upper right')
 plt.show()
 
-y_predict = model.predict(x_test)   # x_test로 y_predict 예측(?)
-print(y_predict)   # 결측치로 인해 nan값이 출력됨
-
-# 결측치 수정
-
-def RMSE(y_test, y_predict):   # RMSE 정의
-    return np.sqrt(mean_squared_error(y_test, y_predict))
-rmse = RMSE(y_test, y_predict)
-print("RMSE : ", rmse)   # RMSE : 81.93167235968318
-
-print("걸린 시간 : ", end - start)
 
 # 제출할 파일
-y_submit = model.predict(test_csv) # 똑같이 스케일링 해주어야 함.
+y_submit = model.predict(test_csv)      # 제출용 파일도 똑같이 스케일링 해주어야 함.
 print(y_submit)
 print(y_submit.shape)   # (715, 1)
 
@@ -135,11 +143,15 @@ print(y_submit.shape)   # (715, 1)
 # submission_0105.csv를 완성시킬 것
 
 print(submission)
-submission['count'] = y_submit   # submission의 count열에 y_submit 대입
+submission['count'] = y_submit      # submission의 count열에 y_submit 대입
 print(submission)
 
-submission.to_csv(path + 'submission_01111725.csv')   # to_csv에 경로와 파일명 입력
+submission.to_csv(path + 'submission_01111725.csv')     # to_csv에 경로와 파일명 입력
 
-# 결과
-# Epoch 00177: early stopping
-# loss :  [2913.16455078125, 2913.16455078125]
+
+""" 
+Epoch 00077: early stopping
+13/13 [==============================] - 0s 346us/step - loss: 2840.0562 - mse: 2840.0562
+loss :  [2840.05615234375, 2840.05615234375]
+RMSE :  53.29217708964767
+걸린 시간 :  2.299095392227173 """

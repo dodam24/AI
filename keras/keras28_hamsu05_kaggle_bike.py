@@ -17,24 +17,22 @@ print(train_csv.shape)   # (10886, 11)   # count=y(결과)에 해당하므로 in
 print(sampleSubmission.shape)   # (6493, 1)
 
 print(train_csv.columns)
-#Index(['season', 'holiday', 'workingday', 'weather', 'temp', 'atemp',
-#        'humidity', 'windspeed', 'casual', 'registered', 'count'],
-#       dtype='object').
+"""
+Index(['season', 'holiday', 'workingday', 'weather', 'temp', 'atemp',
+        'humidity', 'windspeed', 'casual', 'registered', 'count'], dtype='object') """
 
 # print(train_csv.info())
 # print(test_csv.info())
 # print(train_csv.describe())
 
-# *** x는 casual, registered, count 빼고 y는 train에서 count만 가져올 것!
-train_csv=train_csv.drop(['casual', 'registered'], axis=1)
-x = train_csv.drop(['count'], axis=1)
-print(x)   # [10886 rows x 10 columns]
-y = train_csv['count']   # column(결과)만 추출
-print(y)   # [10886 rows x 10 columns]
+# x는 casual, registered, count 열 제외
+# y는 train에서 count값만 가져올 것!
+train_csv=train_csv.drop(['casual', 'registered'], axis=1)  # casual, registered 컬럼 제거
+x = train_csv.drop(['count'], axis=1)   # count 컬럼 제거
+print(x)
+y = train_csv['count']  # column(결과)만 추출
+print(y)
 print(y.shape)   # (10886,)
-
-x_train, x_test, y_train, y_test = train_test_split(x, y,
-    test_size=0.3, shuffle=True, random_state=123)
 
 x_train, x_test, y_train, y_test = train_test_split(x, y,
     train_size=0.3, shuffle=True, random_state=123)  
@@ -42,15 +40,18 @@ x_train, x_test, y_train, y_test = train_test_split(x, y,
 print(x_train.shape, x_test.shape)   # (7620, 10) (3266, 10)
 print(y_train.shape, y_test.shape)   # (7620,) (3266,)
 
-scaler = MinMaxScaler() # minmaxscaler 정의
+
+# 데이터 전처리
+scaler = MinMaxScaler()                     # minmaxscaler 정의
 # scaler = StandardScaler()
-scaler.fit(x_train) # x값의 범위만큼의 가중치 생성
+scaler.fit(x_train)                         # x값의 범위만큼 가중치 생성
 x_train = scaler.transform(x_train)
 # x_train = scaler.fit_transform(x_test)
-x_test = scaler.transform(x_test) # 시작 (transform해야 바뀐다.)
-test_csv = scaler.transform(test_csv) # 제출 파일도 스케일링 해주어야 함.
-
-#2. 모델 구성
+x_test = scaler.transform(x_test)           # x_train fit한 가중치 값 범위에 맞춰서 x_test 데이터 변환
+test_csv = scaler.transform(test_csv)       # 제출 파일도 스케일링 해주어야 함.
+                                            # train 데이터는 fit, transform하고 test 데이터는 transform만!
+""" 
+#2. 모델 구성 (순차형)
 model=Sequential()
 model.add(Dense(4,input_dim=8, activation='relu'))   # activation의 defalut값 = linear
 model.add(Dense(1, activation='relu'))
@@ -63,11 +64,11 @@ model.add(Dense(65, activation='relu'))
 model.add(Dense(33))
 model.add(Dense(6, activation='relu'))
 model.add(Dense(24, activation='relu'))
-model.add(Dense(1))
+model.add(Dense(1)) """
 
-#2. 모델 구성(함수형) # 순차형과 반대로 레이어 구성
-input1 = Input(shape=(8,))
-dense1 = Dense(1, activation='relu')(input1)
+#2. 모델 구성 (함수형)                                  # 순차형과 반대로 레이어 구성
+input1 = Input(shape=(8,))                              # 입력 데이터의 크기(shape)를 Input() 함수의 인자로 입력층 정의 
+dense1 = Dense(1, activation='relu')(input1)            # 이전층을 다음층 함수의 입력으로 사용하고, 변수에 할당
 dense2 = Dense(28)(dense1)
 dense3 = Dense(3, activation='relu')(dense2)
 dense4 = Dense(42)(dense3)
@@ -78,7 +79,7 @@ dense8 = Dense(33)(dense7)
 dense9 = Dense(6, activation='relu')(dense8)
 dense10 = Dense(24, activation='relu')(dense9)
 output1 = Dense(1)(dense10)
-model = Model(inputs=input1, outputs=output1) # 순차형과 달리 model 형태를 마지막에 정의
+model = Model(inputs=input1, outputs=output1)           # 순차형과 달리 model 형태를 마지막에 정의.     Model() 함수에 입력과 출력 정의
 model.summary()
 
 #3. 컴파일, 훈련
@@ -140,8 +141,8 @@ print(sampleSubmission)
 sampleSubmission['count'] = y_submit   # submission의 count열에 y_submit 대입
 print(sampleSubmission)
 
-sampleSubmission.to_csv(path + 'sampleSubmission_01111725.csv')   # to_csv에 경로와 파일명 입력
+sampleSubmission.to_csv(path + 'sampleSubmission_01111725.csv')   # to_csv에 '경로'와 '파일명' 입력
 
-# 결과
-# Epoch 00140: early stopping
-# loss :  24381.33984375
+
+""" Epoch 00179: early stopping
+loss :  24089.712890625 """

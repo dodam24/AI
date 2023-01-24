@@ -65,3 +65,8 @@ print("RMSE : ", RMSE(y_test, y_predict))
 
 r2 = r2_score(y_test, y_predict)
 print("R2 : ", r2)
+
+
+""" Epoch 00125: early stopping
+RMSE :  4.2720104782711115
+R2 :  0.813924703562832 """

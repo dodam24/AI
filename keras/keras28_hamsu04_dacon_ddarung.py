@@ -14,25 +14,21 @@ test_csv = pd.read_csv(path + 'test.csv', index_col=0)   # index_col=0 : 0번째
 submission = pd.read_csv(path + 'submission.csv', index_col=0)
 
 print(train_csv)
-print(train_csv.shape)   # (1459, 10) -> input_dim=10. but count(=y)에 해당하므로 count 분리. 따라서 input_dim=9
-print(submission.shape)   # (715, 1)
+print(train_csv.shape)      # (1459, 10) -> input_dim=10. but count(=y)에 해당하므로 count 분리. 따라서 input_dim=9
+print(submission.shape)     # (715, 1)
 
 print(train_csv.columns)   
-# Index(['hour', 'hour_bef_temperature', 'hour_bef_precipitation',
-#       'hour_bef_windspeed', 'hour_bef_humidity', 'hour_bef_visibility',
-#       'hour_bef_ozone', 'hour_bef_pm10', 'hour_bef_pm2.5', 'count'],
-#      dtype='object')
+""" Index(['hour', 'hour_bef_temperature', 'hour_bef_precipitation',
+       'hour_bef_windspeed', 'hour_bef_humidity', 'hour_bef_visibility',
+       'hour_bef_ozone', 'hour_bef_pm10', 'hour_bef_pm2.5', 'count'], dtype='object') """
 
 print(train_csv.info())
-# #   Column                  Non-Null Count  Dtype
-#---  ------                  --------------  -----
-# 0   hour                    1459 non-null   int64
-# 1   hour_bef_temperature    1457 non-null   float64   # 결측치 2개 (1459개 기준)
-# 2   hour_bef_precipitation  1457 non-null   float64
 
-# # 결측치 처리 방법 
-# 1. 결측치 있는 데이터 삭제 (null값)
-# 2. 임의의 값 설정 (중간 값 or 0 입력)
+""" 
+결측치 처리 방법:
+1. 결측치 있는 데이터 삭제 (null값)
+2. 임의의 값 설정 (중간 값 or 0 입력) 
+"""
 
 print(test_csv.info())
 print(train_csv.describe())
@@ -57,31 +53,34 @@ x_train, x_test, y_train, y_test = train_test_split(
 print(x_train.shape, x_test.shape)   # (929, 9) (399, 9)
 print(y_train.shape, y_test.shape)   # (929,) (399,)
 
-scaler = MinMaxScaler() # minmaxscaler 정의
-#  scaler = StandardScaler()
-scaler.fit(x_train) # x값의 범위만큼의 가중치 생성
+
+# 데이터 전처리
+scaler = MinMaxScaler()                     # minmaxscaler 정의
+# scaler = StandardScaler()
+scaler.fit(x_train)                         # x값의 범위만큼 가중치 생성
 x_train = scaler.transform(x_train)
 # x_train = scaler.fit_transform(x_test)
-x_test = scaler.transform(x_test)# 시작 (transform해야 바뀐다.)
-test_csv = scaler.transform(test_csv) # 제출 파일도 스케일링 해주어야 함.
+x_test = scaler.transform(x_test)           # x_train fit한 가중치 값 범위에 맞춰서 x_test 데이터 변환
+test_csv = scaler.transform(test_csv)       # 제출 파일도 스케일링 해주어야 함.
+                                            # train 데이터는 fit, transform하고 test 데이터는 transform만!
 
-#2. 모델 구성
-model=Sequential()
-model.add(Dense(1,input_dim=9))
+""" #2. 모델 구성 (순차형)
+model = Sequential()
+model.add(Dense(1, input_dim=9))
 model.add(Dense(15))
 model.add(Dense(32))
 model.add(Dense(67))
 model.add(Dense(49))
-model.add(Dense(1))
+model.add(Dense(1)) """
 
-#2. 모델 구성(함수형) # 순차형과 반대로 레이어 구성
-input1 = Input(shape=(9,))
-dense1 = Dense(15, activation='linear')(input1)
+#2. 모델 구성 (함수형)                                  # 순차형과 반대로 레이어 구성
+input1 = Input(shape=(9,))                              # 입력 데이터의 크기(shape)를 Input() 함수의 인자로 입력층 정의
+dense1 = Dense(15, activation='linear')(input1)         # 이전층을 다음층 함수의 입력으로 사용하고, 변수에 할당
 dense2 = Dense(32, activation='sigmoid')(dense1)
 dense3 = Dense(67, activation='relu')(dense2)
 dense4 = Dense(49, activation='linear')(dense3)
 output1 = Dense(1, activation='linear')(dense4)
-model = Model(inputs=input1, outputs=output1) # 순차형과 달리 model 형태를 마지막에 정의
+model = Model(inputs=input1, outputs=output1)           # 순차형과 달리 model 형태를 마지막에 정의.     Model() 함수에 입력과 출력 정의
 model.summary()
 
 #3. 컴파일, 훈련
@@ -110,6 +109,7 @@ print(hist.history)
 print("==================================================")
 print(hist.history['loss'])
 
+# 시각화
 import matplotlib.pyplot as plt
 
 plt.figure(figsize=(9,6))
@@ -125,7 +125,7 @@ plt.legend()
 # plt.legeng(loc='upper right')
 plt.show()
 
-y_predict = model.predict(x_test)   # x_test로 y_predict 예측(?)
+y_predict = model.predict(x_test)   # x_test로 y_predict 예측
 print(y_predict)   # 결측치로 인해 nan값이 출력됨
 
 # 결측치 수정
@@ -138,7 +138,7 @@ print("RMSE : ", rmse)   # RMSE : 81.93167235968318
 print("걸린 시간 : ", end - start)
 
 # 제출할 파일
-y_submit = model.predict(test_csv) # 똑같이 스케일링 해주어야 함.
+y_submit = model.predict(test_csv)  # 제출용 파일도 똑같이 스케일링 해주어야 함.
 print(y_submit)
 print(y_submit.shape)   # (715, 1)
 
@@ -149,8 +149,4 @@ print(submission)
 submission['count'] = y_submit   # submission의 count열에 y_submit 대입
 print(submission)
 
-submission.to_csv(path + 'submission_01111725.csv')   # to_csv에 경로와 파일명 입력
-
-# 결과
-# Epoch 00177: early stopping
-# loss :  [2913.16455078125, 2913.16455078125]
+submission.to_csv(path + 'submission_01111725.csv')   # to_csv에 '경로'와 '파일명' 입력

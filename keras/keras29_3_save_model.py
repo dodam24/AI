@@ -15,7 +15,7 @@ y = dataset.target
 
 print(x.shape, y.shape)     # (506, 13) (506,)
 
-x_train, x_test, y_train, y_test = train_test_split(x,y,test_size=0.2,shuffle=True,random_state=333)
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, shuffle=True, random_state=333)
 
 # Scaler 설정
 scaler = MinMaxScaler()
@@ -65,3 +65,9 @@ print("RMSE : ", RMSE(y_test, y_predict))
 
 r2 = r2_score(y_test, y_predict)
 print("R2 : ", r2)
+
+
+"""
+Epoch 00154: early stopping
+RMSE :  4.316053493364515
+R2 :  0.8100681762271829 """

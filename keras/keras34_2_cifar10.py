@@ -26,10 +26,10 @@ from tensorflow.keras.layers import Conv2D, Dense, Flatten
 
 model = Sequential()
 model.add(Conv2D(filters=128, kernel_size=(2,2), input_shape=(32,32,3), activation='relu'))     # (31, 31, 128)
-model.add(Conv2D(filters=64, kernel_size=(2,2)))                                                # (30, 30, 64)
-model.add(Conv2D(filters=32, kernel_size=(2,2)))                                                # (29. 29, 64)
-model.add(Conv2D(filters=16, kernel_size=(2,2)))                                                # (28, 28, 32)
-model.add(Flatten())                                                                            # 25,088 = 28 * 28 * 32
+model.add(Conv2D(filters=64, kernel_size=(2,2)))    # (30, 30, 64)
+model.add(Conv2D(filters=32, kernel_size=(2,2)))    # (29. 29, 64)
+model.add(Conv2D(filters=16, kernel_size=(2,2)))    # (28, 28, 32)
+model.add(Flatten())    # 25,088 (= 28 * 28 * 32)
 model.add(Dense(10, activation='softmax'))
 
 #3. 컴파일, 훈련
@@ -46,5 +46,5 @@ model.fit(x_train, y_train, epochs=100, verbose=1, batch_size=25, validation_spl
 
 #4. 평가, 예측
 results = model.evaluate(x_test, y_test)
-print('loss: ', results[0])
-print('acc: ', results[1])
+print('loss : ', results[0])
+print('acc : ', results[1])

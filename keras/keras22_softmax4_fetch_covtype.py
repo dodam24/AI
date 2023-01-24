@@ -21,7 +21,7 @@ dtype=int64)) """
 # y = to_categorical(y)   # one hot encoding
 
 import pandas as pd                         # pd.get_dummies 처리: 결측값 제외하고 0과 1로 구성된 더미값을 생성             
-y = pd.get_dummies(y, dummy_na=True)       # 결측값 처리(dummy_na=True 옵션): Nan을 생성하여 결측값도 인코딩 처리함
+y = pd.get_dummies(y, dummy_na=True)        # 결측값 처리(dummy_na=True 옵션): Nan을 생성하여 결측값도 인코딩 처리함
                                             #   dummy_na=True: (581012, 8) // dummy_na=Flase: (581012, 7)
                                             
                                             # numpy 자료형이 pandas 자료형을 바로 받아들이지 못하기 때문에 마지막에 에러 발생

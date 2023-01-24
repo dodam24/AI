@@ -36,7 +36,7 @@ model.summary()
 
 # model.save_weights(path + 'keras29_5_save_weights1.h5')
 # model.load_weights(path + 'keras29_5_save_weights1.h5')
-# Modle1이 저장되지 않고 가중치만 저장됨 (사용 시, 모델 필요함)
+# Model이 저장되지 않고 가중치만 저장됨 (사용할 경우, 모델 설정이 필요함)
 # weights를 가져왔으므로 fit은 필요없음
 # RuntimeError: You must compile your model before training/testing. Use `model.compile(optimizer, loss)`.
 
@@ -45,14 +45,15 @@ from tensorflow.keras.callbacks import EarlyStopping
 
 model.compile(loss='mse', optimizer='adam', metrics=['mae'])
 
-""" earlyStopping = EarlyStopping(monitor='val_loss', mode='min', patience=20, restore_best_weights=True, verbose=1)
+# EarlyStopping 설정
+earlyStopping = EarlyStopping(monitor='val_loss', mode='min', patience=20, restore_best_weights=True, verbose=1)
 
 hist = model.fit(x_train, y_train,
                  epochs=500,
                  batch_size=32,
                  validation_split=0.2,
                  callbacks=[earlyStopping],
-                 verbose=1) """
+                 verbose=1)
 
 
 path = 'C:/study/_save/'
@@ -73,3 +74,20 @@ print("RMSE : ", RMSE(y_test, y_predict))
 
 r2 = r2_score(y_test, y_predict)
 print("R2 : ", r2)
+
+
+""" RMSE :  4.2720104782711115
+R2 :  0.813924703562832 """
+
+
+""" 
+save_model, load_model: 모델 전체를 파일로 저장하고 불러오는 방법
+save_weights, load_weights: 가중치만 파일로 저장하고 불러오는 방법
+
+save & load_model과 save & load_weights의 차이점:
+    model save 및 load는 모델 전체를 저장하기 때문에, load 이후에 별도로 처리할 필요가 없어 매우 간편함
+    weights save 및 load는 가중치만 저장하기 때문에, 모델 architecture를 동일하게 만들어야 함
+    
+    ex. save로 저장한 파일은 79K
+        save_weights로 저장한 파일은 40K
+        따라서 weights 파일이 훨씬 더 작기 때문에 성능이 향상됨 (시간 감소 등) """

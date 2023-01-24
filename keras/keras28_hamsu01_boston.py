@@ -1,6 +1,6 @@
 import numpy as np
 # import pandas as pd
-# # import sklearn as sk
+# import sklearn as sk
 from tensorflow.keras.models import Sequential, Model
 from tensorflow.keras.layers import Dense, Input
 from sklearn.model_selection import train_test_split
@@ -15,15 +15,14 @@ y = dataset.target
 x_train, x_test, y_train, y_test = train_test_split(x, y,
     test_size=0.3, shuffle=True, random_state=123)
 
-x_train, x_test, y_train, y_test = train_test_split(x, y,
-    train_size=0.3, shuffle=True, random_state=123)
 
-scaler = MinMaxScaler() # minmaxscaler 정의
-#  scaler = StandardScaler()
-scaler.fit(x_train) # x값의 범위만큼의 가중치 생성
+# 데이터 전처리
+scaler = MinMaxScaler()                     # minmaxscaler 정의
+# scaler = StandardScaler()
+scaler.fit(x_train)                         # x값의 범위만큼 가중치 생성
 x_train = scaler.transform(x_train)
 # x_train = scaler.fit_transform(x_test)
-x_test = scaler.transform(x_test)# 시작 (transform해야 바뀐다.)
+x_test = scaler.transform(x_test)           # x_train fit한 가중치 값 범위에 맞춰서 x_test 데이터 변환
 
 
 # print(x)
@@ -32,28 +31,27 @@ print(x.shape)   # (506, 13)
 print(y.shape)   # (506,)
 
 print(dataset.feature_names)
-# ['CRIM' 'ZN' 'INDUS' 'CHAS' 'NOX' 'RM' 'AGE' 'DIS' 'RAD' 'TAX' 'PTRATIO'
-# 'B' 'LSTAT']
+# ['CRIM' 'ZN' 'INDUS' 'CHAS' 'NOX' 'RM' 'AGE' 'DIS' 'RAD' 'TAX' 'PTRATIO' 'B' 'LSTAT']
 print(dataset.DESCR)
 
 
-#2. 모델 구성
+""" #2. 모델 구성 (순차형)
 model = Sequential()
 model.add(Dense(10, input_dim=13))
 model.add(Dense(7))
 model.add(Dense(2))
 model.add(Dense(5))
 model.add(Dense(70))
-model.add(Dense(1))
+model.add(Dense(1)) """
 
-#2. 모델 구성(함수형) # 순차형과 반대로 레이어 구성
-input1 = Input(shape=(13,))
-dense1 = Dense(50, activation='linear')(input1)
+#2. 모델 구성 (함수형)                                  # 순차형과 반대로 레이어 구성
+input1 = Input(shape=(13,))                             # 입력 데이터의 크기(shape)를 Input() 함수의 인자로 입력층 정의
+dense1 = Dense(50, activation='linear')(input1)         # 이전층을 다음층 함수의 입력으로 사용하고, 변수에 할당
 dense2 = Dense(40, activation='sigmoid')(dense1)
 dense3 = Dense(30, activation='relu')(dense2)
 dense4 = Dense(20, activation='linear')(dense3)
-output1 = Dense(10, activation='linear')(dense4)
-model = Model(inputs=input1, outputs=output1) # 순차형과 달리 model 형태를 마지막에 정의
+output1 = Dense(1, activation='linear')(dense4)
+model = Model(inputs=input1, outputs=output1)           # 순차형과 달리 model 형태를 마지막에 정의.     Model() 함수에 입력과 출력 정의
 model.summary()
 
 #3. 컴파일, 훈련
@@ -74,8 +72,3 @@ print("RMSE : ", RMSE(y_test, y_predict))
 
 r2 = r2_score(y_test, y_predict)
 print("R2 : ", r2)
-
-# 결과
-# loss :  [64.87870788574219, 5.8619842529296875]
-# RMSE :  8.054731976120436
-# R2 :  0.26462716027999067
