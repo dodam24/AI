@@ -11,10 +11,8 @@ datasets = load_diabetes()
 x = datasets.data
 y = datasets.target
 
-# print(x)
-print(x.shape)  # (442, 10)
-# print(y)
-print(y.shape)  # (442,)
+print(x.shape)      # (442, 10)
+print(y.shape)      # (442,)
 
 print(datasets.feature_names)
 
@@ -27,12 +25,11 @@ print(x_train.shape, x_test.shape)      # (309, 10) (133, 10)
 
 x_train = x_train.reshape(309, 1, 2, 5)       
 x_test = x_test.reshape(133, 1, 2, 5)
-print(x_train.shape, x_test.shape)
 
 
 #2. 모델 구성 (순차형)
 model = Sequential()
-model.add(Conv2D(64, (2,1), input_shape=(1, 2, 5)))
+model.add(Conv2D(64, (2,2), input_shape=(1, 2, 5)))
 model.add(Flatten())
 model.add(Dense(1, activation='linear'))
 

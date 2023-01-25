@@ -23,11 +23,13 @@ print(type(date))                   # <class 'str'>
 print(x_train.shape, y_train.shape)     # (60000, 28, 28) (60000,)  -> input_shape = (28, 28, 1)
 print(x_test.shape, y_test.shape)       # (10000, 28, 28) (10000,)
 
+# 이미지 데이터는 (데이터 수, 행, 열, 컬러)의 4차원으로 구성.   input_shape = '데이터 수' 제외하고 3차원 값 입력
+# 현재 x_train, x_test 데이터는 3차원이므로 4차원으로 늘려줘야 함
 ''' x_train = x_train.reshape(60000, 28, 28, 1)     # 4차원으로 변경
 x_test = x_test.reshape(10000, 28, 28, 1) '''
 
-x_train = x_train.reshape(60000, 28*28*1)       # 2차원으로 변경
-x_test = x_test.reshape(10000, 28*28*1)
+x_train = x_train.reshape(60000, 28*28)       # 2차원으로 변경
+x_test = x_test.reshape(10000, 28*28)
 
 print(np.unique(y_train, return_counts=True))   # 배열 내 고유한 원소별 개수
 # (array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], dtype=uint8), array([5923, 6742, 5958, 6131, 5842, 5421, 5918, 6265, 5851, 5949], dtype=int64))
@@ -48,12 +50,12 @@ model.add(Dense(10, activation='softmax'))  # 손글씨 이미지 분류 (숫자
 '''
  
 #2. 모델 (함수형)
-input1 = Input(shape=(28*28*1))                         # 입력 데이터의 크기(shape)를 Input() 함수의 인자로 입력층 정의
+input1 = Input(shape=(28*28,))                          # 입력 데이터의 크기(shape)를 Input() 함수의 인자로 입력층 정의
 dense1 = Dense(50, activation='linear')(input1)         # 이전층을 다음층 함수의 입력으로 사용하고, 변수에 할당
 dense2 = Dense(40, activation='sigmoid')(dense1)
 dense3 = Dense(30, activation='relu')(dense2)
 dense4 = Dense(20, activation='linear')(dense3)
-output1 = Dense(1, activation='linear')(dense4)
+output1 = Dense(10, activation='linear')(dense4)
 model = Model(inputs=input1, outputs=output1)           # 순차형과 달리 model 형태를 마지막에 정의.     Model() 함수에 입력과 출력 정의
 model.summary()
 
@@ -151,3 +153,9 @@ model.add(Conv2D(filters=64, kernel_size=(2,2)))
  
 
 """
+
+
+""" Epoch 00012: early stopping
+313/313 [==============================] - 0s 537us/step - loss: 1.6129 - acc: 0.3727
+loss :  1.6128586530685425
+acc :  0.3727000057697296 """

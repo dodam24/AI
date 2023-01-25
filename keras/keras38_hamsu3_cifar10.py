@@ -20,6 +20,9 @@ print(x_test.shape, y_test.shape)       # (10000, 32, 32, 3) (10000, 1)
 x_train = x_train.reshape(50000, 32*32*3)   # 2차원으로 변경
 x_test = x_test.reshape(10000, 32*32*3)
 
+x_train = x_train/255   # 데이터 정규화 (데이터 폭이 너무 클 때 사용)
+x_test = x_test/255
+
 print(np.unique(y_train, return_counts=True))
 """ (array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], dtype=uint8), 
 array([5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000], dtype=int64)) """
@@ -45,7 +48,7 @@ dense1 = Dense(50, activation='linear')(input1)         # 이전층을 다음층
 dense2 = Dense(40, activation='sigmoid')(dense1)
 dense3 = Dense(30, activation='relu')(dense2)
 dense4 = Dense(20, activation='linear')(dense3)
-output1 = Dense(1, activation='linear')(dense4)
+output1 = Dense(10, activation='softmax')(dense4)
 model = Model(inputs=input1, outputs=output1)           # 순차형과 달리 model 형태를 마지막에 정의.     Model() 함수에 입력과 출력 정의
 model.summary()
 
@@ -76,4 +79,5 @@ ReLu: 0 이상의 값들은 그대로 출력하게 하는 활성화 함수
 Softmax: classification '''
 
 
-
+""" loss :  1.5975428819656372
+acc :  0.42320001125335693 """

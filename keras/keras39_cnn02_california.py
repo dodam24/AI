@@ -32,10 +32,10 @@ print(x_train.shape, x_test.shape)
 
 ''' scaler = MinMaxScaler()                     # minmaxscaler 정의
 # scaler = StandardScaler()
-scaler.fit(x_train)                         # x값의 범위만큼 가중치 생성
+scaler.fit(x_train)                             # x값의 범위만큼 가중치 생성
 x_train = scaler.transform(x_train)
 # x_train = scaler.fit_transform(x_test)
-x_test = scaler.transform(x_test)           # x_train fit한 가중치 값 범위에 맞춰서 x_test 데이터 변환
+x_test = scaler.transform(x_test)               # x_train fit한 가중치 값 범위에 맞춰서 x_test 데이터 변환
  '''
  
 #2. 모델 구성 (순차형)
@@ -95,5 +95,5 @@ r2 = r2_score(y_test, y_predict)
 print("R2 : ", r2)
 
 
-''' RMSE :  0.8134638705138021
-R2 :  0.49956218036297173 '''
+""" RMSE :  1.1070910012490482
+R2 :  0.07308432381509733 """

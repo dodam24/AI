@@ -60,16 +60,16 @@ x_train, x_test, y_train, y_test = train_test_split(
 
 print(x_train.shape, x_test.shape)      # (120, 4) (30, 4)
 
-x_train = x_train.reshape(120, 1, 2, 2)       
-x_test = x_test.reshape(30, 1, 2, 2)
+x_train = x_train.reshape(120, 2, 2, 1)       
+x_test = x_test.reshape(30, 2, 2, 1)
 print(x_train.shape, x_test.shape)
 
 
 #2. 모델 구성 (순차형)
 model = Sequential()
-model.add(Conv2D(64, (2,1), input_shape=(1, 2, 2)))
+model.add(Conv2D(64, (2,2), input_shape=(2, 2, 1)))
 model.add(Flatten())
-model.add(Dense(1, activation='linear'))
+model.add(Dense(3, activation='softmax'))
 
 model.summary()
 
@@ -105,7 +105,7 @@ print("y_test(원래값) : " , y_test)         # 원래값
 
 
 """ 
-loss :  1.1023621559143066
-accuracy :  0.3333333432674408
-y_pred(예측값) :  [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+loss :  0.263496458530426
+accuracy :  0.9333333373069763
+y_pred(예측값) :  [0 2 0 2 1 1 0 2 0 2 2 2 2 0 0 0 2 0 2 1 0 2 1 1 0 2 1 1 1 2]
 y_test(원래값) :  [0 2 0 1 1 1 0 2 0 2 2 2 2 0 0 0 2 0 2 1 0 2 1 1 0 2 1 1 1 1] """

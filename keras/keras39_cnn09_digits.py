@@ -30,18 +30,18 @@ print(y.shape)      # (1797, 10)
 x_train, x_test, y_train, y_test = train_test_split(
     x, y, test_size=0.2, shuffle=True, random_state=333)
 
-print(x_train.shape, x_test.shape)      # (1797, 64) (1797,)
+print(x_train.shape, x_test.shape)      # (1437, 64) (360, 64)
 
-x_train = x_train.reshape(1797, 2, 4, 8)       
-x_test = x_test.reshape(1797, 2, 4, 8)
+x_train = x_train.reshape(1437, 4, 4, 4)       
+x_test = x_test.reshape(360, 4, 4, 4)
 print(x_train.shape, x_test.shape)
 
 
 #2. 모델 구성 (순차형)
 model = Sequential()
-model.add(Conv2D(64, (2,1), input_shape=(2, 4, 8)))
+model.add(Conv2D(64, (2,2), input_shape=(4, 4, 4)))
 model.add(Flatten())
-model.add(Dense(1, activation='linear'))
+model.add(Dense(10, activation='linear'))
 
 model.summary()
 
@@ -73,15 +73,7 @@ print('accuracy : ', acc)
 print('time : ', end - start)
 
 
-
-""" Epoch 00148: early stopping
-loss :  1.1648075580596924
-accuracy :  0.7666666507720947
-y_pred :  [6 3 6 7 7 6 7 1 0 2 6 6 1 6 3 0 3 5 7 0 5 1 3 2 4 7 9 7 5 6 4 8 1 0 9 5 7
- 4 6 1 7 0 0 3 1 1 3 3 0 7 6 5 1 0 7 9 7 5 9 6 3 6 2 5 0 6 1 4 7 6 6 5 7 6
- 0 0 5 3 9 2 5 4 4 3 3 2 4 9 2 2 6 4 1 5 4 0 1 1 5 0 6]
-y_test :  [6 3 6 7 7 1 7 1 0 2 6 6 1 6 3 0 5 5 7 0 5 1 5 2 4 9 5 7 5 1 4 8 1 0 9 5 9
- 4 8 1 7 0 0 3 1 7 3 3 0 8 8 5 4 0 7 8 7 5 5 6 3 8 2 9 0 8 2 4 7 8 8 5 7 8
- 0 0 5 2 9 2 5 4 4 3 3 2 4 9 2 2 1 4 1 5 4 0 7 1 5 0 8]
-accuracy :  0.7666666666666667
-time :  5.672308444976807 """
+""" 
+loss :  12.044818878173828
+accuracy :  0.23055554926395416
+time :  0.707050085067749 """

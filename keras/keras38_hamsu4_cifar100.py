@@ -61,12 +61,12 @@ model.add(Dense(100, activation='softmax'))
 model.summary() '''
 
 #2. 모델 (함수형)
-input1 = Input(shape=(32*32*3))                       # 입력 데이터의 크기(shape)를 Input() 함수의 인자로 입력층 정의
+input1 = Input(shape=(32*32*3, ))                       # 입력 데이터의 크기(shape)를 Input() 함수의 인자로 입력층 정의
 dense1 = Dense(50, activation='linear')(input1)         # 이전층을 다음층 함수의 입력으로 사용하고, 변수에 할당
 dense2 = Dense(40, activation='sigmoid')(dense1)
 dense3 = Dense(30, activation='relu')(dense2)
 dense4 = Dense(20, activation='linear')(dense3)
-output1 = Dense(1, activation='linear')(dense4)
+output1 = Dense(100, activation='softmax')(dense4)
 model = Model(inputs=input1, outputs=output1)           # 순차형과 달리 model 형태를 마지막에 정의.     Model() 함수에 입력과 출력 정의
 model.summary()
 
@@ -87,4 +87,7 @@ results = model.evaluate(x_test, y_test)
 print('loss : ', results[0])
 print('acc : ', results[1])
 
+
+""" loss :  4.605712890625
+acc :  0.009999999776482582 """
 

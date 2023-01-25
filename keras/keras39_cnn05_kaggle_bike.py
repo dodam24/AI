@@ -38,6 +38,7 @@ x_train, x_test, y_train, y_test = train_test_split(x, y,
     train_size=0.3, shuffle=True, random_state=123)  
 
 print(x_train.shape, x_test.shape)      # (3265, 8) (7621, 8)
+print(y_train.shape, y_test.shape)      # (3265,) (7621,)
 
 x_train = x_train.reshape(3265, 2, 2, 2)       
 x_test = x_test.reshape(7621, 2, 2, 2)

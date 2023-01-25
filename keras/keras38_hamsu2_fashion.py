@@ -4,12 +4,12 @@ import matplotlib.pyplot as plt
 
 (x_train, y_train), (x_test, y_test) = fashion_mnist.load_data()        # 텐서플로 fashion_mnist 데이터셋 불러와서 변수에 저장
 
-print(x_train.shape, y_train.shape)     # (60000, 28, 28) (60000,)  # 뒤에 1 생략 (흑백 데이터)  
-                                        # reshape 해야 함. input_shape = (28, 28, 1)
+print(x_train.shape, y_train.shape)     # (60000, 28, 28) (60000,)  # 뒤에 1 생략 (흑백 데이터)  -> reshape 필요! input_shape = (28, 28, 1)
 print(x_test.shape, y_test.shape)       # (10000, 28, 28) (10000,)
 
-x_train = x_train.reshape(60000, 28*28*1)     # 2차원으로 변경
-x_test = x_test.reshape(10000, 28*28*1)
+
+x_train = x_train.reshape(60000, 28*28)     # 2차원으로 변경
+x_test = x_test.reshape(10000, 28*28)
 
 
 print(x_train[0])
@@ -17,8 +17,43 @@ print(y_train[0])   # 5
 
 # print(x_train)    # 28 X 28. 6만개    # 흰색(255), 검은색(0)
 
-plt.imshow(x_train[0], 'gray')
-plt.show
+""" plt.imshow(x_train[0], 'gray')
+plt.show """
+
+
+from tensorflow.keras.models import Sequential, Model
+from tensorflow.keras.layers import Dense, Conv2D, Flatten, MaxPooling2D, Dropout, Input
+
+''' #2. 모델 (DNN 적용)
+model = Sequential()
+model.add(Dense(128, activation='relu', input_shape=(784, )))
+model.add(Dropout(0.3))
+model.add(Dense(64, activation='relu'))
+model.add(Dropout(0.3))
+model.add(Dense(32, activation='relu'))
+model.add(Dense(10, activation='softmax'))
+
+model.summary() '''
+
+#2. 모델 (함수형)
+input1 = Input(shape=(28*28, ))                          # 입력 데이터의 크기(shape)를 Input() 함수의 인자로 입력층 정의
+dense1 = Dense(50, activation='linear')(input1)          # 이전층을 다음층 함수의 입력으로 사용하고, 변수에 할당
+dense2 = Dense(40, activation='sigmoid')(dense1)
+dense3 = Dense(30, activation='relu')(dense2)
+dense4 = Dense(20, activation='linear')(dense3)
+output1 = Dense(10, activation='softmax')(dense4)
+model = Model(inputs=input1, outputs=output1)            # 순차형과 달리 model 형태를 마지막에 정의.     Model() 함수에 입력과 출력 정의
+model.summary()
+
+
+#3. 컴파일, 훈련
+model.compile(loss="sparse_categorical_crossentropy", optimizer="adam", metrics=["acc"])
+model.fit(x_train, y_train, epochs=100, verbose=1, batch_size=32, validation_split=0.25)
+
+#4. 평가, 예측
+results = model.evaluate(x_test, y_test)
+print('loss : ', results[0])
+print('acc : ', results[1])
 
 
 
@@ -42,36 +77,5 @@ plt.show
 """
 
 
-from tensorflow.keras.models import Sequential, Model
-from tensorflow.keras.layers import Dense, Conv2D, Flatten, MaxPooling2D, Dropout, Input
-
-''' #2. 모델 (DNN 적용)
-model = Sequential()
-model.add(Dense(128, activation='relu', input_shape=(784, )))
-model.add(Dropout(0.3))
-model.add(Dense(64, activation='relu'))
-model.add(Dropout(0.3))
-model.add(Dense(32, activation='relu'))
-model.add(Dense(10, activation='softmax'))
-
-model.summary() '''
-
-#2. 모델 (함수형)
-input1 = Input(shape=(28*28*1))                         # 입력 데이터의 크기(shape)를 Input() 함수의 인자로 입력층 정의
-dense1 = Dense(50, activation='linear')(input1)         # 이전층을 다음층 함수의 입력으로 사용하고, 변수에 할당
-dense2 = Dense(40, activation='sigmoid')(dense1)
-dense3 = Dense(30, activation='relu')(dense2)
-dense4 = Dense(20, activation='linear')(dense3)
-output1 = Dense(1, activation='linear')(dense4)
-model = Model(inputs=input1, outputs=output1)           # 순차형과 달리 model 형태를 마지막에 정의.     Model() 함수에 입력과 출력 정의
-model.summary()
-
-
-#3. 컴파일, 훈련
-model.compile(loss="sparse_categorical_crossentropy", optimizer="adam", metrics=["acc"])
-model.fit(x_train, y_train, epochs=100, verbose=1, batch_size=32, validation_split=0.25)
-
-#4. 평가, 예측
-results = model.evaluate(x_test, y_test)
-print('loss : ', results[0])
-print('acc : ', results[1])
+""" loss :  0.7213355898857117
+acc :  0.720300018787384 """

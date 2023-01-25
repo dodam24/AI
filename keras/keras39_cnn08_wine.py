@@ -10,7 +10,7 @@ datasets = load_wine()
 x = datasets.data
 y = datasets.target
 
-print(x.shape, y.shape) # (178, 13) (178,)
+print(x.shape, y.shape)     # (178, 13) (178,)
 print(y)
 print(np.unique(y))                         # array에서 unique한 원소만 추출: [0 1 2]
 print(np.unique(y, return_counts=True))     # 각 고유 원소의 개수를 출력
@@ -32,16 +32,16 @@ x_train, x_test, y_train, y_test = train_test_split(
 
 print(x_train.shape, x_test.shape)      # (142, 13) (36, 13)
 
-x_train = x_train.reshape(142, 1, 1, 13)       
-x_test = x_test.reshape(36, 1, 1, 13)
+x_train = x_train.reshape(142, 13, 1, 1)       
+x_test = x_test.reshape(36, 13, 1, 1)
 print(x_train.shape, x_test.shape)
 
 
 #2. 모델 구성 (순차형)
 model = Sequential()
-model.add(Conv2D(64, (2,1), input_shape=(1, 1, 13)))
+model.add(Conv2D(64, (2,1), input_shape=(13, 1, 1)))
 model.add(Flatten())
-model.add(Dense(1, activation='linear'))
+model.add(Dense(3, activation='softmax'))
 
 model.summary()
 
@@ -77,9 +77,10 @@ print('acc : ', acc)
 
 
 """ 
-loss :  0.20830047130584717
-accuracy :  0.9722222089767456
-y_pred(예측값) :  [1 0 1 0 1 1 2 0 0 1 1 1 2 0 2 1 2 1 1 0 1 2 0 0 0 0 0 2 2 2 1 2 2 0 2 1]
+loss :  0.4411430358886719
+accuracy :  0.75
+y_pred(예측값) :  [1 0 1 0 1 1 1 0 0 1 1 1 1 0 2 2 1 2 1 2 1 1 0 0 2 0 0 2 1 1 1 2 2 0 2 1]
 y_test(원래값) :  [1 0 1 0 1 1 1 0 0 1 1 1 2 0 2 1 2 1 1 0 1 2 0 0 0 0 0 2 2 2 1 2 2 0 2 1]
-acc :  0.9722222089767456 
+acc :  0.75 
+
 """

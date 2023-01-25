@@ -59,22 +59,22 @@ x_train, x_test, y_train, y_test = train_test_split(
 
 print(x_train.shape, x_test.shape)      # (1021, 9) (438, 9)
 
-x_train = x_train.reshape(1021, 3, 3, 3)       
-x_test = x_test.reshape(438, 3, 3, 3)
+x_train = x_train.reshape(1021, 3, 3, 1)       
+x_test = x_test.reshape(438, 3, 3, 1)
 print(x_train.shape, x_test.shape)
 
-''' # 데이터 전처리
+# 데이터 전처리
 scaler = MinMaxScaler()                     # minmaxscaler 정의
 # scaler = StandardScaler()
 scaler.fit(x_train)                         # x값의 범위만큼의 가중치 생성
 x_train = scaler.transform(x_train)
 # x_train = scaler.fit_transform(x_test)
 x_test = scaler.transform(x_test)           # x_train fit한 가중치 값 범위에 맞춰서 x_test 데이터 변환
-test_csv = scaler.transform(test_csv)       # 제출 파일도 스케일링 해주어야 함. '''
+test_csv = scaler.transform(test_csv)       # 제출 파일도 스케일링 해주어야 함.
 
 #2. 모델 구성 (순차형)
 model = Sequential()
-model.add(Conv2D(64, (2,1), input_shape=(3, 3, 3)))
+model.add(Conv2D(64, (2,1), input_shape=(3, 3, 1)))
 model.add(Flatten())
 model.add(Dense(1, activation='linear'))
 

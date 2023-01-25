@@ -16,16 +16,16 @@ y = datasets['target']
 x_train, x_test, y_train, y_test = train_test_split(
     x, y, shuffle=True, random_state=333, test_size=0.2)
 
-print(x_train.shape, x_test.shape)      # (455, 300) (114, 30)
+print(x_train.shape, x_test.shape)      # (455, 30) (114, 30)
 
-x_train = x_train.reshape(455, 3, 10, 10)       
-x_test = x_test.reshape(114, 2, 3, 5)
+x_train = x_train.reshape(455, 5, 2, 3)       
+x_test = x_test.reshape(114, 5, 2, 3)
 print(x_train.shape, x_test.shape)
 
 
 #2. 모델 구성 (순차형)
 model = Sequential()
-model.add(Conv2D(64, (2,1), input_shape=(3, 10, 10)))
+model.add(Conv2D(64, (2,1), input_shape=(5, 2, 3)))
 model.add(Flatten())
 model.add(Dense(1, activation='linear'))
 
@@ -68,8 +68,6 @@ from sklearn.metrics import r2_score, accuracy_score
 # acc = accuracy_score(y_test, y_predict)
 # print("accuracy_score : ", acc)
 
-""" 
-Epoch 00062: early stopping
-loss :  [0.17204582691192627, 0.9385964870452881]   # [loss값, metrics 즉, accuracy의 지표] 
- = loss :  0.17052115499973297
-   accuracy :  0.9649122953414917 """
+
+""" loss :  10.418604850769043
+accuracy :  0.3245614171028137 """
