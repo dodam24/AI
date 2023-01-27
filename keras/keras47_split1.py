@@ -25,7 +25,7 @@ print(bbb)
 print(bbb.shape)    # (6, 5)
 
 x = bbb[:, :-1]
-y = bbb[:, -1]  # 가장 오른 쪽 끝
+y = bbb[:, -1]  # 가장 오른쪽 끝
 print(x, y)
 ''' 
 [[1 2 3 4]
@@ -65,4 +65,3 @@ print('loss : ', loss)
 x_predict = np.array([7, 8, 9, 10]).reshape(1, 4, 1)     # 11 예측하기
 result = model.predict(x_predict)
 print('[7, 8, 9, 10]의 결과 : ', result)
-

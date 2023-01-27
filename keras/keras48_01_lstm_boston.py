@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.datasets import load_boston
 from tensorflow.keras.models import Sequential, Model
-from tensorflow.keras.layers import Dense, Input, Dropout, Conv2D, Flatten
+from tensorflow.keras.layers import Dense, Input, SimpleRNN, LSTM
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
@@ -20,8 +20,8 @@ print(np.min(x), np.max(x))     # 0.0 711.0
 x_train, x_test, y_train, y_test = train_test_split(x, y, shuffle=True, random_state=333, test_size=0.2)
 print(x_train.shape, x_test.shape)      # (404, 13) (102, 13)
 
-x_train = x_train.reshape(404, 13, 1, 1)       
-x_test = x_test.reshape(102, 13, 1, 1)
+x_train = x_train.reshape(404, 13, 1)       
+x_test = x_test.reshape(102, 13, 1)
 print(x_train.shape, x_test.shape)
 
 ''' # scaler 설정
@@ -32,26 +32,14 @@ x_test = scaler.transform(x_test)           # test 데이터는 transform만 적
  '''
 #2. 모델 구성 (순차형)
 model = Sequential()
-model.add(Conv2D(64, kernel_size=(2, 1), input_shape=(13, 1, 1)))
-model.add(Flatten())
-model.add(Dense(1, activation='linear'))
+model.add(LSTM(64, input_shape=(13, 1)))
+model.add(Dense(50, activation='relu'))
+model.add(Dense(40, activation='relu'))
+model.add(Dense(30, activation='relu'))
+model.add(Dense(20, activation='relu'))
+model.add(Dense(1))
 
 model.summary()
-
-''' #2. 모델 구성 (함수형)
-input1 = Input(shape=(13,))
-dense1 = Dense(50, activation='relu')(input1)
-drop1 = Dropout(0.5)(dense1)                            # Drop-out은 서로 연결된 연결망(layer)에서 0부터 1 사이의 확률로 뉴런을 제거(drop)하는 기법
-dense2 = Dense(40, activation='sigmoid')(drop1)         # 어떤 특정한 설명변수 Feature만을 과도하게 집중 학습함으로써 발생할 수 있는 과대적합(Overfitting)을 방지하기 위한 목적으로 사용
-drop2 = Dropout(0.3)(dense2)                            # Drop-out Rate는 하이퍼파라미터이며, 일반적으로 0.5로 설정 (뉴런 각각은 0.5의 확률로 제거될지 말지 랜덤하게 결정됨)    
-dense3 = Dense(30, activation='linear')(drop2)
-drop3 = Dropout(0.2)(dense3)
-dense4 = Dense(20, activation='relu')(drop3)
-dense5 = Dense(10, activation='relu')(dense4)
-output1 = Dense(1, activation='linear')(dense5)
-model = Model(inputs=input1, outputs=output1)
-
-model.summary() '''
 
 path = 'C:/study/_save/'    # 경로 설정
 # path ='./_save/' 
@@ -107,14 +95,3 @@ print("==============================")
 print("R2 : ", r2)
 print("RMSE : ", RMSE(y_test, y_predict))
 print("==============================")
-
-
-''' 
-Epoch 00087: early stopping
-4/4 [==============================] - 0s 2ms/step - loss: 35.8710 - mae: 3.9004
-mse :  35.871028900146484
-mae :  3.9003632068634033
-==============================
-R2 :  0.6342638137107528
-RMSE :  5.989242744965044
-============================== '''
