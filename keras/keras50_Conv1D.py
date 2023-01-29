@@ -1,90 +1,77 @@
 import numpy as np
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Conv1D, Dense
+from tensorflow.keras.layers import Conv1D, Flatten, Dense
 
 
 #1. 데이터
 a = np.array(range(1, 101))
-x_predict = np.array(range(96, 106))    # 예상: y = 100 ~ 107 (split 해야 함)
+x_predict = np.array(range(96, 106))
 
-# x_split
-timesteps = 5       # x는 4개, y는 1개
+# 데이터 쪼개기 (4:1)
+timesteps = 5
 
-def split_x(dataset, timesteps):    # split_x라는 이름으로 함수를 정의 
-    aaa = []    # aaa 라는 빈 리스트 생성
+def split_x(dataset, timesteps):
+    aaa = []
     for i in range(len(dataset) - timesteps + 1):   
         subset = dataset[i : (i + timesteps)]       
         aaa.append(subset)                          
     return np.array(aaa)
 
-bbb = split_x(a, timesteps)
-print(bbb)
-print(bbb.shape)    # (96, 5)
+bbb = split_x(a, timesteps)     # 데이터를 5개씩 자름
+# print(bbb)
+# print(bbb.shape)      # (96, 5)
 
-x = bbb[:, :-1]
-y = bbb[:, -1]
+x = bbb[:, :-1]         # x는 앞에서 4개
+y = bbb[:, -1]          # y는 맨 뒤 1개
 print(x, y)
 
 print(x.shape, y.shape)     # (96, 4) (96,)
-x = x.reshape(96, 4, 1)
+x = x.reshape(96, 4, 1)     # RNN에 넣어줘야 하므로 3차원 형태로 변경
 
 
-# y_split
-x_predict = np.array(range(96, 106))
-
+# 결과(x_predict) 쪼개기 
 timesteps = 4
 
-def split_y(dataset, timesteps):
-    ccc = []
-    for i in range(len(dataset) - timesteps + 1):
-        subset = dataset[i : (i + timesteps)]
-        ccc.append(subset)
-    return np.array(ccc)
+ccc = split_x(x_predict, timesteps)
+print(ccc.shape)        # (7, 4)
 
-x_predict = split_y(x_predict, timesteps)
-print(x_predict)
-print(x_predict.shape)                  # (7, 4)
-
-x_predict = x_predict.reshape(7,4,1)
-print(x_predict.shape)                  # (7, 4, 1)
-  
-from sklearn.model_selection import train_test_split
-x_train, x_test, y_train, y_test = train_test_split(x, y, shuffle=True, random_state=123)
-
-x_train = x_train.reshape(72, 4, 1)
-x_test = x_test.reshape(24, 4, 1)
-x_predict = x_predict.reshape(7, 4, 1)
-
-
+x_predict = ccc.reshape(7, 4, 1)
+        
+        
 #2. 모델 구성
 model = Sequential()
-model.add(Conv1D(100, 2, input_shape=(4, 1)))   # 2는 커널 사이즈
+model.add(Conv1D(100, 2, input_shape=(4, 1), padding='same'))   # 2는 커널 사이즈
+model.add(Conv1D(64, 2, input_shape=(4, 1), padding='same'))
+model.add(Flatten())
 model.add(Dense(16, activation='relu'))
 model.add(Dense(16, activation='relu'))
 model.add(Dense(1))
 
 model.summary()
 
+
 #3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam')
-model.fit(x_train, y_train, epochs=10, batch_size=3)
+model.fit(x, y, epochs=100, batch_size=5)
+
 
 #4. 평가, 예측
-loss = model.evaluate(x_test, y_test)
+loss = model.evaluate(x, y)
 print('loss : ', loss)
 
-# x_predict = np.array((range(96, 106))).reshape()     # 100 ~ 107 예측
-
 result = model.predict(x_predict)
-print('결과 : ', result)
+print('[100, 101, 102, 103, 104, 105, 106]에 대한 예측값 : ')
+print(result)
 
 
 
-# Bidirectional 사용
-''' loss :  1.4072107076644897
-결과 :  [[91.71789 ] '''
-
-# Bidirectional 사용 X
-''' loss :  3.281897783279419
-결과 :  [[92.55916 ] '''
-
+""" 
+loss :  0.004346523433923721
+[100, 101, 102, 103, 104, 105, 106]에 대한 예측값 : 
+[[100.12431 ]
+ [101.12666 ]
+ [102.128975]
+ [103.13131 ]
+ [104.13363 ]
+ [105.13597 ]
+ [106.13828 ]] """

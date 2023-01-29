@@ -67,7 +67,7 @@ es = EarlyStopping(monitor='val_loss', mode='min', patience=10, restore_best_wei
 mcp = ModelCheckpoint(monitor='val_loss', model='auto', verbose=1, save_best_only=True,
                       filepath = filepath + 'k34_mnist_' + date + '_' + filename)
 
-model.fit(x_train, y_train, epochs=100, verbose=1, batch_size=32, validation_split=0.25, callbacks=[es, mcp])
+model.fit(x_train, y_train, epochs=10, verbose=1, batch_size=32, validation_split=0.25, callbacks=[es, mcp])
 
 #4. 평가, 예측
 results = model.evaluate(x_test, y_test)

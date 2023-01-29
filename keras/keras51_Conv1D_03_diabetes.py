@@ -1,35 +1,34 @@
 import numpy as np
-from sklearn.datasets import load_boston
+from sklearn.datasets import load_diabetes
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Conv1D, Flatten
-
+from tensorflow.keras.layers import Conv1D, Flatten, Dense
 
 #1. 데이터
-datasets = load_boston()
+datasets = load_diabetes()
 x = datasets.data
 y = datasets.target
+print(x.shape, y.shape)     # (442, 10) (442,)
 
-x_train, x_test, y_train, y_test = train_test_split(x, y, shuffle=True, random_state=123, test_size=0.3)
+x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.7, shuffle=True, random_state=123)
 
 # 스케일링
-scaler = MinMaxScaler()
+scaler= MinMaxScaler()
 x_train = scaler.fit_transform(x_train)
 x_test = scaler.transform(x_test)
-print(x_train.shape, x_test.shape)          # (354, 13) (152, 13)
+print(x_train.shape, x_test.shape)      # (309, 10) (133, 10)
 
 # Reshape로 형태 변환
-x_train = x_train.reshape(354, 13, 1)
-x_test = x_test.reshape(152, 13, 1)
-# print(x_train.shape, x_test.shape)
+x_train = x_train.reshape(309, 10, 1)
+x_test = x_test.reshape(133, 10, 1)
 
 
 #2. 모델 구성
 model = Sequential()
-model.add(Conv1D(64, 2, input_shape=(13, 1), padding='same'))
-model.add(Conv1D(32, 2, input_shape=(13, 1), padding='same'))
-model.add(Conv1D(16, 2, input_shape=(13, 1), padding='same'))
+model.add(Conv1D(64, 2, input_shape=(10, 1), padding='same'))
+model.add(Conv1D(32, 2, input_shape=(10, 1), padding='same'))
+model.add(Conv1D(16, 2, input_shape=(10, 1), padding='same'))
 model.add(Flatten())
 model.add(Dense(8, activation='relu'))
 model.add(Dense(4, activation='relu'))
@@ -66,8 +65,9 @@ R2 = r2_score(y_test, y_predict)
 print("R2 : ", R2)
 
 
-
 """ 
-loss :  23.448986053466797
-RMSE :  4.842415090287888
-R2 :  0.7098906652197512 """
+Epoch 00097: early stopping
+5/5 [==============================] - 0s 751us/step - loss: 3503.9858
+loss :  3503.98583984375
+RMSE :  59.19447469905232
+R2 :  0.41076895610832265 """

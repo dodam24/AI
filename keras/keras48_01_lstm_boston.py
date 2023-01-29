@@ -1,5 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
 from sklearn.datasets import load_boston
 from tensorflow.keras.models import Sequential, Model
 from tensorflow.keras.layers import Dense, Input, SimpleRNN, LSTM
