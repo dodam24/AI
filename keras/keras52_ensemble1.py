@@ -1,6 +1,8 @@
 # 앙상블 모델: 여러 개의 모델을 합쳐서 하나의 모델을 만드는 것
 
 import numpy as np
+
+#1. 데이터
 x1_datasets = np.array([range(100), range(301, 401)]).transpose()
 print(x1_datasets.shape)    # (100, 2)      # 삼성전자 시가, 고가
 x2_datasets = np.array([range(101, 201), range(411, 511), range(150, 250)]).T
@@ -51,8 +53,3 @@ model.fit([x1_train, x2_train], y_train, epochs=10, batch_size=8)
 #4. 평가, 예측
 loss = model.evaluate([x1_test, x2_test], y_test)
 print('loss : ', loss)
-
-
-# 엑셀 파일 '시가, 고가, 저가, 종가, 거래량' 사용해서 Emsemble 모델 소스, 가중치(MCP) 제출
-# 제목 : (이름) (금액)
-# 내용 : 삼성 월요일 시가
