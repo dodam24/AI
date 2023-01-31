@@ -16,7 +16,7 @@ model.add(Dense(1))
 
 model.summary()         # 모델의 구조를 요약 출력
 
-Model: "sequential"
+Model: "Sequential"
 """ _________________________________________________________________
  Layer (type)                Output Shape              Param #
 =================================================================

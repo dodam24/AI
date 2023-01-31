@@ -34,7 +34,7 @@ xy_test = test_datagen.flow_from_directory(
     class_mode='binary',      
     color_mode='grayscale',
     shuffle=True,
-    # Found 160 images belonging to 2 classes.
+    # Found 120 images belonging to 2 classes.
 )
 
 print(xy_train)
@@ -59,6 +59,6 @@ print(type(xy_train[0][1]))     # <class 'numpy.ndarray'>
 
 
 
-# x = (160, 150, 150, 1)    ad: 80장, normal: 80장이므로
-# y = (160,)
-# np.unique 결과: 0, 1 각각 80, 80
+''' x = (160, 150, 150, 1)    ad: 80장, normal: 80장이므로
+y = (160,)
+np.unique 결과: 0, 1 각각 80, 80 '''

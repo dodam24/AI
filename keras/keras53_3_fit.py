@@ -23,7 +23,7 @@ test_datagen = ImageDataGenerator(       # test 데이터는 rescale만 수행 (
 xy_train = train_datagen.flow_from_directory(       # 이름이 xy_인 이유: x, y 묶어서 데이터 셋 구성
     './_data/brain/train/',
     target_size=(100, 100),     # 모든 데이터가 200 x 200으로 증폭 또는 축소됨
-    batch_size=1000,            # batch_size 크게 줘서 전체 데이터 개수 추출 (데이터 개수만큼만 돌기 때문에)       
+    batch_size=1000,            # batch_size 크게 줘서 전체 데이터 개수 추출 가능 (데이터 개수만큼만 돌기 때문에)
     class_mode='binary',      
     color_mode='grayscale',
     shuffle=True,
@@ -51,16 +51,18 @@ model.add(Conv2D(32, (3,3), activation='relu'))             # (95, 95, 32)
 model.add(Flatten())
 model.add(Dense(16, activation='relu'))
 model.add(Dense(1, activation='sigmoid'))                   # y가 0, 1이므로 sigmoid 적용 (또는 softmax 사용해서 one-hot encoding 해줄 것!)
+# model.add(Dense(2, activation='softmax'))                 # sigmoid 대신 softmax 함수 적용 (one-hot encoding 해줄 것! 이 때, compile의 loss='sparse_categorical_crossentropy' 적용)
 
 
 #3. 컴파일, 훈련
 model.compile(loss='binary_crossentropy', optimizer='adam',
-              metrics=['acc'])                              
+              metrics=['acc'])
+# model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['acc'])      # sigmoide 대신 softmax 함수 적용했을 때                  
 hist = model.fit(xy_train[0][0], xy_train[0][1], 
                  batch_size=16, 
                  epochs=300, 
-                 validation_data = (xy_test[0][0], xy_test[0][1]))      # 전체 데이터를 batch 1개로 잡아서 x_train과 y_train을 다음과 같은 형태로 표현 가능
-''' hist = model.fit_generator(xy_train, steps_per_epoch=16, epochs=300,
+                 validation_data = (xy_test[0][0], xy_test[0][1]))          # 전체 데이터를 batch 1개로 잡아서 x_train과 y_train을 다음과 같은 형태로 표현 가능
+''' hist = model.fit_generator(xy_train, steps_per_epoch=16, epochs=300,    # 160개 데이터를 batch_size=10으로 했으니까 steps_per_epochs는 16
                     validation_data = xy_test,
                     validation_steps=4) '''
                     
@@ -82,3 +84,9 @@ print('loss : ', loss)
 '''
 
 # 이미지 데이터는 gpu로 돌려야 빠름
+
+''' 
+loss :  2.802720473482623e-07
+val_loss :  1.6368576288223267
+accuracy :  1.0
+val_acc :  0.699999988079071 '''
